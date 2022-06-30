@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/guidance_content_tv"
+        android:gravity="center"
+        android:text="这里是宝典内容"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

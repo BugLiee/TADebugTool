@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="#CFD8BA"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:hint="请输入您的TAG,逗号分隔"
+        android:lines="1"
+        android:id="@+id/define_tag_et"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="4"/>
+
+    <TextView
+        android:background="@color/log_view_selector"
+        android:id="@+id/define_tag_positive_tv"
+        android:layout_width="0dp"
+        android:text="@string/text_positive"
+        android:layout_height="60dp"
+        android:layout_weight="1" />
+    <TextView
+        android:background="@color/log_view_selector"
+        android:id="@+id/define_tag_negative_tv"
+        android:text="@string/text_negative"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="1" />
+</LinearLayout>

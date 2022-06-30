@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.thinkingdata.tadebugtool.ui.widget.ResizeableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/app_info_list_bg_round">
+        <TextView
+            android:id="@+id/app_list_tv_bar"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="请选择您要调试的应用"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:background="#747895"
+        android:id="@+id/app_info_list_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</com.thinkingdata.tadebugtool.ui.widget.ResizeableLayout>

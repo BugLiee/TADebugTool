@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#CFD8BA"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <View
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="2">
+            <TextView
+                android:gravity="center"
+                android:background="@color/log_view_selector"
+                android:id="@+id/start_link"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="启用日志" />
+            <View
+                android:background="#D4EFEF"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:gravity="center"
+                android:background="@color/log_view_selector"
+                android:id="@+id/export_log"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="导出日志" />
+            <View
+                android:background="#D4EFEF"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:gravity="center"
+                android:background="@color/log_view_selector"
+                android:id="@+id/log_tag"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="仅TA日志" />
+        </LinearLayout>
+        <View
+            android:background="#D4EFEF"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="2">
+            <TextView
+                android:gravity="center"
+                android:background="@color/log_view_selector"
+                android:id="@+id/pause_recover"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="暂停日志" />
+            <View
+                android:background="#D4EFEF"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:gravity="center"
+                android:background="@color/log_view_selector"
+                android:id="@+id/clear_log"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="清除日志" />
+            <View
+                android:background="#D4EFEF"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
+            <Spinner
+                android:gravity="center"
+                android:id="@+id/log_level"
+                android:background="@color/log_view_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+            </Spinner>
+
+
+        </LinearLayout>
+        <View
+            android:background="#1BE3E3"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+    </LinearLayout>
+    <!--<ScrollView
+        android:background="#a8e8e8"
+        android:layout_width="match_parent"
+        android:layout_weight="5"
+        android:layout_height="0dp">-->
+    <com.thinkingdata.tadebugtool.ui.widget.LogTextView
+        android:id="@+id/log_tv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:background="#DBDFD9"
+        android:fadeScrollbars="true"
+        android:focusable="true"
+        android:gravity="center_vertical|top"
+        android:minHeight="300dp"
+        android:scrollbarFadeDuration="2000"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical"
+        android:textColor="#000000"
+        android:textSize="10sp" />
+    <!--<WebView
+        android:id="@+id/log_wv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>-->
+<!--    </ScrollView>-->
+</LinearLayout>

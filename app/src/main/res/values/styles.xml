@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PopupAppListViewStyle">
+        <item name="android:windowEnterAnimation">@anim/app_list_in</item>
+        <item name="android:windowExitAnimation">@anim/app_list_out</item>
+    </style>
+
+    <style name="PopupHeaderViewStyle">
+        <item name="android:windowEnterAnimation">@anim/app_header_in</item>
+        <item name="android:windowExitAnimation">@anim/app_header_out</item>
+    </style>
+
+    <style name="PopupCopyMessageViewStyle">
+<!--        <item name="android:windowEnterAnimation">@anim/app_header_in</item>-->
+<!--        <item name="android:windowExitAnimation">@anim/app_header_out</item>-->
+    </style>
+</resources>

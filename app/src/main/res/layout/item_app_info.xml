@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="61dp">
+
+    <ImageView
+        android:id="@+id/app_icon_iv"
+        android:layout_margin="6dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/app_name_title_tv"
+        android:layout_width="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:text="APP名："
+        android:layout_height="35dp"
+        android:textColor="#000000"
+        android:layout_toEndOf="@+id/app_icon_iv" />
+
+    <TextView
+        android:id="@+id/app_name_tv"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:paddingStart="6dp"
+        android:layout_height="35dp"
+        android:textColor="#A5AF92"
+        android:layout_toEndOf="@+id/app_name_title_tv" />
+
+    <TextView
+        android:id="@+id/app_packagename_title_tv"
+        android:layout_width="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:text="包    名："
+        android:layout_height="25dp"
+        android:textColor="#000000"
+        android:layout_below="@+id/app_name_title_tv"
+        android:layout_toEndOf="@+id/app_icon_iv" />
+
+    <TextView
+        android:id="@+id/app_packagename_tv"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@+id/app_name_tv"
+        android:layout_toEndOf="@+id/app_packagename_title_tv"
+        android:gravity="center_vertical"
+        android:paddingStart="6dp"
+        android:textColor="#A5AF92" />
+    <View
+        android:layout_below="@+id/app_packagename_tv"
+        android:layout_width="match_parent"
+        android:background="#ADB9C6"
+        android:layout_height="1dp"
+        />
+</RelativeLayout>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/popup_info_header"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#CFD8BA" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#1BE3E3" />
+
+    <ScrollView
+        android:background="#DBDFD9"
+        android:layout_weight="5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/app_name_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="应用名：" />
+
+            <TextView
+                android:textColor="#000000"
+                
+                android:id="@+id/app_name_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/app_version_name_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="应用VersionName：" />
+
+            <TextView
+                
+                android:textColor="#000000"
+                android:id="@+id/app_version_name_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/app_version_code_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="应用VersionCode：" />
+
+            <TextView
+                
+                android:textColor="#000000"
+                android:id="@+id/app_version_code_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/lib_version_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="SDK版本：" />
+
+            <TextView
+                
+                android:textColor="#000000"
+                android:id="@+id/lib_version_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/device_id_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="设备ID：" />
+
+            <TextView
+                
+                android:textColor="#000000"
+                android:id="@+id/device_id_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/app_id_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="项目ID：" />
+
+            <Spinner
+                android:gravity="center"
+                android:id="@+id/app_id_value_spinner"
+                android:background="@color/info_view_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/server_url_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="上报地址：" />
+
+            <Spinner
+                android:gravity="center"
+                android:id="@+id/server_url_value_spinner"
+                android:background="@color/info_view_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/is_multi_process_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="是否多进程模式：" />
+
+            <TextView
+                
+                android:textColor="#000000"
+                android:id="@+id/is_multi_process_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/enable_bg_start_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="是否支持后台start事件：" />
+
+            <TextView
+                
+                android:textColor="#000000"
+                android:id="@+id/enable_bg_start_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/sdk_mode_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="当前运行模式：" />
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/sdk_mode_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/track_status_key_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="当前track模式：" />
+
+            <TextView
+                android:textColor="#000000"
+                android:id="@+id/track_status_value_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#DBDFD9"
+            android:orientation="horizontal"/>
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

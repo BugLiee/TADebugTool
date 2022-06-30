@@ -1,0 +1,38 @@
+package com.thinkingdata.tadebugtool.utils;
+
+import android.content.Context;
+import android.graphics.Point;
+import android.view.Display;
+import android.view.View;
+import android.view.WindowManager;
+
+public class GetWinPoint {
+    //
+    //获取屏幕宽高
+    public static Point GetWinWH(Context context) {
+        Display defaultDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point point = new Point();
+        defaultDisplay.getSize(point);
+        return point;
+    }
+
+
+    public static int dp2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
+    }
+
+    // View宽，高
+    public static int[] getLocation(View v) {
+        int[] loc = new int[2];
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        v.measure(w, h);
+
+        loc[0] = v.getMeasuredWidth();
+        loc[1] = v.getMeasuredHeight();
+
+        return loc;
+    }
+
+}
