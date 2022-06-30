@@ -33,11 +33,8 @@ import androidx.cardview.widget.CardView;
 import com.thinkingdata.tadebugtool.MainActivity;
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
-import com.thinkingdata.tadebugtool.ui.widget.popup.PopupInfoView;
-import com.thinkingdata.tadebugtool.ui.widget.popup.PopupLogView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,14 +46,30 @@ import java.util.TimerTask;
  * @create 2022/4/27
  * @since 1.0.0
  */
+@SuppressLint("ViewConstructor")
 public class FloatLayout extends FrameLayout {
 
-    private static FloatLayout instance = null;
-    private String packageName = "";
-
+    @SuppressLint("StaticFieldLeak")
+    private static volatile FloatLayout instance = null;
+    private final Activity mActivity;
+    private final CardView[] menuItems = new CardView[2];
+    //内部解锁相关
+    //锁屏9键坐标
+    private final int[] loc1 = new int[2];
+    private final int[] loc2 = new int[2];
+    private final int[] loc3 = new int[2];
+    private final int[] loc4 = new int[2];
+    private final int[] loc5 = new int[2];
+    private final int[] loc6 = new int[2];
+    private final int[] loc7 = new int[2];
+    private final int[] loc8 = new int[2];
+    private final int[] loc9 = new int[2];
+    CardView rootItem;
+    List<Integer> keyList = new ArrayList<>();
+    List<Integer> secureList = new ArrayList<>();
+    List<int[]> sourceList = new ArrayList<>();
     private WindowManager.LayoutParams mLayoutParams;
     private WindowManager.LayoutParams mMenuLayoutParams;
-    private final Activity mActivity;
     private WindowManager mWindowManager;
     private int radius = VIEW_RADIUS;
     private int rotation = 0;
@@ -64,14 +77,8 @@ public class FloatLayout extends FrameLayout {
     private int screenHeight;
     private float originX = 0f;
     private float originY = 0f;
-
     private RootItemOnTouchListener rootItemOnTouchListener;
-
-    private final long ANIMATION_DURATION = 400;
-    private final long ANIMATION_PERIOD_DEFAULT = 5;
-    private final long ANIMATION_DISTANCE_LIMIT_DEFAULT = 400;
     private int ANIMATION_DISTANCE = 5;
-
     // 0:up  1:down  2:move
     private int status = 0;
     //left 0 right 1
@@ -80,70 +87,9 @@ public class FloatLayout extends FrameLayout {
     private int showItems = -1;
     //
     private boolean clickRoot = false;
-    CardView rootItem;
-
-    private final CardView[] menuItems = new CardView[4];
     private MyHandler mHandler = null;
     private LinearLayout menuLayout;
-
-    private PopupInfoView popupInfoView = null;
-    private PopupLogView popupLogView = null;
-
-    //内部解锁相关
-    //锁屏9键坐标
-    private int[] loc1 = new int[2];
-    private int[] loc2 = new int[2];
-    private int[] loc3 = new int[2];
-    private int[] loc4 = new int[2];
-    private int[] loc5 = new int[2];
-    private int[] loc6 = new int[2];
-    private int[] loc7 = new int[2];
-    private int[] loc8 = new int[2];
-    private int[] loc9 = new int[2];
-
     private boolean enableLog = false;
-    List<Integer> keyList = new ArrayList<>();
-    List<Integer> secureList = new ArrayList<>();
-    List<int[]> sourceList = new ArrayList<>();
-
-    class MyHandler extends Handler {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
-                mWindowManager.updateViewLayout(instance, mLayoutParams);
-                mWindowManager.updateViewLayout(menuLayout, mMenuLayoutParams);
-            } else if (msg.what == 1) {
-                for (int i = 0; i < menuItems.length; i++) {
-                    menuLayout.addView(menuItems[i], radius * 2, radius * 2);
-                    if (i > 0) {
-                        menuItems[i].setVisibility(VISIBLE);
-                        menuItems[i].startAnimation(getOpenAnimation(i, true));
-                    }
-                }
-            } else if (msg.what == -1) {
-                for (int i = 0; i < menuItems.length; i++) {
-                    if (i > 0) {
-                        menuItems[i].startAnimation(getCloseAnimation(i, true));
-                    }
-                }
-            } else if (msg.what == 2) {
-                for (int i = 0; i < menuItems.length; i++) {
-                    menuLayout.addView(menuItems[i], radius * 2, radius * 2);
-                    if (i > 0) {
-                        menuItems[i].setVisibility(VISIBLE);
-                        menuItems[i].startAnimation(getOpenAnimation(i, false));
-                    }
-                }
-            } else if (msg.what == -2) {
-                for (int i = 0; i < menuItems.length; i++) {
-                    if (i > 0) {
-                        menuItems[i].startAnimation(getCloseAnimation(i, false));
-                    }
-                }
-            }
-        }
-    }
 
     private FloatLayout(@NonNull Activity activity) {
         super(activity);
@@ -163,7 +109,6 @@ public class FloatLayout extends FrameLayout {
 
     public void init(String packageName) {
         mHandler = new MyHandler();
-        this.packageName = packageName;
         mWindowManager = (WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE);
         rotation = mWindowManager.getDefaultDisplay().getRotation();
         initScreenSize();
@@ -173,38 +118,14 @@ public class FloatLayout extends FrameLayout {
         initRootItem();
     }
 
-
-    class RootItemOnTouchListener implements OnTouchListener {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            rootItem.setOnTouchListener(null);
-            clickRoot = true;
-            return false;
-        }
-    }
-
-
+    @SuppressLint("ClickableViewAccessibility")
     private void initRootItem() {
         rootItem = new CardView(mActivity);
-        rootItem.setRadius(radius / 2);
+        rootItem.setRadius(radius / 2f);
         rootItem.setBackgroundResource(R.mipmap.ic_root);
         rootItemOnTouchListener = new RootItemOnTouchListener();
         rootItem.setOnTouchListener(rootItemOnTouchListener);
         this.addView(rootItem, radius * 2, radius * 2);
-    }
-
-    class MyTimeTask extends TimerTask {
-        int what = -99;
-
-        MyTimeTask(int what) {
-            this.what = what;
-        }
-
-        @Override
-        public void run() {
-            mHandler.sendEmptyMessage(what);
-        }
     }
 
     public void attachToWindow() {
@@ -237,13 +158,13 @@ public class FloatLayout extends FrameLayout {
         loc2[1] = centerLocY - oWidth * 2;
         loc3[0] = centerLocX + oWidth * 2;
         loc3[1] = centerLocY - oWidth * 2;
-        loc4[0] = centerLocX - oWidth *2;
+        loc4[0] = centerLocX - oWidth * 2;
         loc4[1] = centerLocY;
         loc5[0] = centerLocX;
         loc5[1] = centerLocY;
-        loc6[0] = centerLocX + oWidth *2;
+        loc6[0] = centerLocX + oWidth * 2;
         loc6[1] = centerLocY;
-        loc7[0] = centerLocX - oWidth *2;
+        loc7[0] = centerLocX - oWidth * 2;
         loc7[1] = centerLocY + oWidth * 2;
         loc8[0] = centerLocX;
         loc8[1] = centerLocY + oWidth * 2;
@@ -270,118 +191,27 @@ public class FloatLayout extends FrameLayout {
         secureList.add(7);
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     private void initMenu() {
         menuLayout = new LinearLayout(mActivity);
         menuLayout.setBackgroundColor(Color.TRANSPARENT);
 
         CardView blankItem = new CardView(mActivity);
-        blankItem.setRadius(radius / 2);
+        blankItem.setRadius(radius / 2f);
         blankItem.setCardBackgroundColor(Color.TRANSPARENT);
         blankItem.setVisibility(INVISIBLE);
 
-        CardView logItem = new CardView(mActivity);
-        logItem.setRadius(radius / 2);
-//        logItem.setCardBackgroundColor(Color.YELLOW);
-        TextView logItemTV = new TextView(mActivity);
-//        logItemTV.setText("LOG");
-        logItemTV.setGravity(Gravity.CENTER);
-        logItem.setBackgroundResource(R.mipmap.ic_log);
-        logItem.addView(logItemTV);
-        logItem.setVisibility(INVISIBLE);
-
-        CardView infoItem = new CardView(mActivity);
-        infoItem.setRadius(radius / 2);
-//        infoItem.setCardBackgroundColor(Color.BLACK);
-        TextView infoItemTV = new TextView(mActivity);
-//        infoItemTV.setText("INFO");
-        infoItemTV.setGravity(Gravity.CENTER);
-        infoItem.setBackgroundResource(R.mipmap.ic_info);
-        infoItem.addView(infoItemTV);
-        infoItem.setVisibility(INVISIBLE);
-
         CardView settingsItem = new CardView(mActivity);
-        settingsItem.setRadius(radius / 2);
-//        settingsItem.setCardBackgroundColor(Color.RED);
+        settingsItem.setRadius(radius / 2f);
         TextView settingsItemTV = new TextView(mActivity);
-//        settingsItemTV.setText("SET");
         settingsItemTV.setGravity(Gravity.CENTER);
         settingsItem.setBackgroundResource(R.mipmap.ic_settings);
         settingsItem.addView(settingsItemTV);
         settingsItem.setVisibility(INVISIBLE);
 
-        logItem.setOnClickListener(v -> {
-            if (popupInfoView != null) {
-                popupInfoView.unbindThis();
-                mWindowManager.removeView(popupInfoView);
-                popupInfoView = null;
-            }
-            if (popupLogView == null) {
-                popupLogView = PopupLogView.getInstance(mActivity);
-                popupLogView.init(packageName);
-                popupLogView.setRadius(radius / 2);
-
-                WindowManager.LayoutParams p = TAUtil.getLayoutParams(mActivity.getApplicationContext());
-//                    p.x = mLayoutParams.x + radius * 2;
-                p.x = 0;
-                p.y = mLayoutParams.y + radius * 3;
-//                    p.width = screenWidth - p.x * 2;
-                p.width = screenWidth;
-                p.height = screenHeight > screenWidth ? p.width * 3 / 2 : p.width * 2 / 3;
-                p.height = Math.min(p.height, screenHeight - p.y);
-                p.flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
-                mWindowManager.addView(popupLogView, p);
-            } else {
-                popupLogView.unbindThis();
-                mWindowManager.removeView(popupLogView);
-                popupLogView = null;
-            }
-        });
-        infoItem.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (popupLogView != null) {
-                    popupLogView.unbindThis();
-                    mWindowManager.removeView(popupLogView);
-                    popupLogView = null;
-                }
-                if (popupInfoView == null) {
-                    popupInfoView = PopupInfoView.getInstance(mActivity);
-                    popupInfoView.init(packageName);
-                    popupInfoView.setRadius(radius / 2);
-
-                    WindowManager.LayoutParams p = TAUtil.getLayoutParams(mActivity.getApplicationContext());
-                    p.x = 0;
-                    p.y = mLayoutParams.y + radius * 3;
-                    p.width = screenWidth;
-                    p.height = screenHeight > screenWidth ? p.width * 3 / 2 : p.width * 2 / 3;
-                    p.height = Math.min(p.height, screenHeight - p.y);
-                    p.flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                            | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
-                    mWindowManager.addView(popupInfoView, p);
-                } else {
-                    popupInfoView.unbindThis();
-                    mWindowManager.removeView(popupInfoView);
-                    popupInfoView = null;
-                }
-            }
-        });
-
         settingsItem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (popupInfoView != null) {
-                    popupInfoView.unbindThis();
-                    mWindowManager.removeView(popupInfoView);
-                    popupInfoView = null;
-                }
-                if (popupLogView != null) {
-                    popupLogView.unbindThis();
-                    mWindowManager.removeView(popupLogView);
-                    popupLogView = null;
-                }
                 clickRoot = true;
                 performShowOrHide();
                 //等待动画执行结束，延迟300 +100 ms
@@ -400,9 +230,7 @@ public class FloatLayout extends FrameLayout {
 
 
         menuItems[0] = blankItem;
-        menuItems[1] = logItem;
-        menuItems[2] = infoItem;
-        menuItems[3] = settingsItem;
+        menuItems[1] = settingsItem;
     }
 
     private void initScreenSize() {
@@ -411,6 +239,7 @@ public class FloatLayout extends FrameLayout {
         screenHeight = screenSize[1];
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -482,6 +311,9 @@ public class FloatLayout extends FrameLayout {
                                 mHandler.sendEmptyMessage(0);
                             }
                         };
+                        long ANIMATION_DURATION = 400;
+                        long ANIMATION_PERIOD_DEFAULT = 5;
+                        long ANIMATION_DISTANCE_LIMIT_DEFAULT = 400;
                         timer.schedule(task, 0, Math.abs(distance) < ANIMATION_DISTANCE_LIMIT_DEFAULT ? ANIMATION_PERIOD_DEFAULT : ANIMATION_DURATION / times);
                     }
                 }
@@ -592,6 +424,7 @@ public class FloatLayout extends FrameLayout {
                             timer.schedule(new MyTimeTask(-1), 240);
                         }
 
+                        @SuppressLint("ClickableViewAccessibility")
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             timer.cancel();
@@ -625,6 +458,7 @@ public class FloatLayout extends FrameLayout {
                             timer.schedule(new MyTimeTask(2), 240);
                         }
 
+                        @SuppressLint("ClickableViewAccessibility")
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             showItems = -showItems;
@@ -647,6 +481,7 @@ public class FloatLayout extends FrameLayout {
                             timer.schedule(new MyTimeTask(-2), 240);
                         }
 
+                        @SuppressLint("ClickableViewAccessibility")
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             showItems = -showItems;
@@ -663,7 +498,6 @@ public class FloatLayout extends FrameLayout {
             }
         }
     }
-
 
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
@@ -737,13 +571,70 @@ public class FloatLayout extends FrameLayout {
                 animation.setFillAfter(true);
                 rootItem.startAnimation(animation);
                 showItems = -1;
+            }
+        }
+    }
 
-                if (popupLogView != null) {
-                    popupLogView.unbindThis();
-                    mWindowManager.removeView(popupLogView);
-                    popupLogView = null;
+    class MyHandler extends Handler {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                mWindowManager.updateViewLayout(instance, mLayoutParams);
+                mWindowManager.updateViewLayout(menuLayout, mMenuLayoutParams);
+            } else if (msg.what == 1) {
+                for (int i = 0; i < menuItems.length; i++) {
+                    menuLayout.addView(menuItems[i], radius * 2, radius * 2);
+                    if (i > 0) {
+                        menuItems[i].setVisibility(VISIBLE);
+                        menuItems[i].startAnimation(getOpenAnimation(i, true));
+                    }
+                }
+            } else if (msg.what == -1) {
+                for (int i = 0; i < menuItems.length; i++) {
+                    if (i > 0) {
+                        menuItems[i].startAnimation(getCloseAnimation(i, true));
+                    }
+                }
+            } else if (msg.what == 2) {
+                for (int i = 0; i < menuItems.length; i++) {
+                    menuLayout.addView(menuItems[i], radius * 2, radius * 2);
+                    if (i > 0) {
+                        menuItems[i].setVisibility(VISIBLE);
+                        menuItems[i].startAnimation(getOpenAnimation(i, false));
+                    }
+                }
+            } else if (msg.what == -2) {
+                for (int i = 0; i < menuItems.length; i++) {
+                    if (i > 0) {
+                        menuItems[i].startAnimation(getCloseAnimation(i, false));
+                    }
                 }
             }
+        }
+    }
+
+    class RootItemOnTouchListener implements OnTouchListener {
+
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            rootItem.setOnTouchListener(null);
+            clickRoot = true;
+            return false;
+        }
+    }
+
+    class MyTimeTask extends TimerTask {
+        int what = -99;
+
+        MyTimeTask(int what) {
+            this.what = what;
+        }
+
+        @Override
+        public void run() {
+            mHandler.sendEmptyMessage(what);
         }
     }
 }
