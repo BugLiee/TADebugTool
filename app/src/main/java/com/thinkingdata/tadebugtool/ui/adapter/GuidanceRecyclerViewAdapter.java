@@ -59,12 +59,13 @@ public class GuidanceRecyclerViewAdapter  extends RecyclerView.Adapter<GuidanceR
 
     @Override
     public void onBindViewHolder(@NonNull GuidanceRecyclerHolder holder, int position) {
+        int pos = position;
             holder.textView.setText(itemList.get(position));
             holder.textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (itemClickListener != null) {
-                        itemClickListener.onClick(position);
+                        itemClickListener.onClick(pos);
                     }
                 }
             });

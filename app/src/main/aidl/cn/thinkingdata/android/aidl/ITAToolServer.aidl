@@ -21,4 +21,6 @@ interface ITAToolServer {
     String showSharedPreferences();
 
     void unbindThis();
+
+    String checkAppID(String appIDs);
 }

@@ -10,4 +10,6 @@
     <string name="text_negative">取消</string>
     <string name="text_guidance_menu">宝典目录</string>
     <string name="info_spinner_item_status_string">正常</string>
+    <string name="input_appid_hint">请输入您想要调试的AppID</string>
+    <string name="add">添加</string>
 </resources>

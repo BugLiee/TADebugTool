@@ -4,16 +4,22 @@
 
 package com.thinkingdata.tadebugtool.ui.widget;
 
+import static com.thinkingdata.tadebugtool.common.TAConstants.KEY_TA_TOOL_ACTION;
 import static com.thinkingdata.tadebugtool.common.TAConstants.VIEW_RADIUS;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -26,6 +32,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -38,6 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import cn.thinkingdata.android.aidl.ITAToolServer;
 
 /**
  * < Float Layout >.
@@ -91,6 +100,8 @@ public class FloatLayout extends FrameLayout {
     private LinearLayout menuLayout;
     private boolean enableLog = false;
 
+    private List<String> appIDs = new ArrayList<>();
+
     private FloatLayout(@NonNull Activity activity) {
         super(activity);
         mActivity = activity;
@@ -107,7 +118,9 @@ public class FloatLayout extends FrameLayout {
         return instance;
     }
 
-    public void init(String packageName) {
+    public void init(String packageName, List<String> appIDs) {
+        this.appIDs.clear();
+        this.appIDs.addAll(appIDs);
         mHandler = new MyHandler();
         mWindowManager = (WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE);
         rotation = mWindowManager.getDefaultDisplay().getRotation();
@@ -116,6 +129,11 @@ public class FloatLayout extends FrameLayout {
         initLayoutParams();
         initMenu();
         initRootItem();
+
+        Intent intent = new Intent();
+        intent.setAction(KEY_TA_TOOL_ACTION);
+        intent.setPackage(packageName);
+        mActivity.getApplicationContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -218,11 +236,7 @@ public class FloatLayout extends FrameLayout {
                 rootItem.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mWindowManager.removeView(instance);
-                        instance = null;
-                        //start Activity
-                        Intent intent = new Intent(mActivity, MainActivity.class);
-                        mActivity.startActivity(intent);
+                        unbindThis("");
                     }
                 }, 400);
             }
@@ -636,5 +650,53 @@ public class FloatLayout extends FrameLayout {
         public void run() {
             mHandler.sendEmptyMessage(what);
         }
+    }
+
+    public static ITAToolServer mTAToolServer;
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mTAToolServer = ITAToolServer.Stub.asInterface(service);
+            StringBuilder appIDStr = new StringBuilder();
+            for (int i = 0; i < appIDs.size(); i++) {
+                appIDStr.append(appIDs.get(i));
+                if (i < appIDs.size()-1) {
+                    appIDStr.append(",");
+                }
+            }
+            try {
+                String ret = mTAToolServer.checkAppID(appIDStr.toString());
+                if (!TextUtils.isEmpty(ret)) {
+                    unbindThis("请确认您的appID是否正确，或者移除不可用的ID : " + ret + " 后重新尝试!");
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mTAToolServer = null;
+        }
+    };
+
+    public void unbindThis(String msg) {
+        if (mTAToolServer != null) {
+            try {
+                mTAToolServer.unbindThis();
+                mTAToolServer = null;
+                mActivity.getApplicationContext().unbindService(serviceConnection);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        mWindowManager.removeView(instance);
+        instance = null;
+        //start Activity
+        Intent intent = new Intent(mActivity, MainActivity.class);
+        if (!TextUtils.isEmpty(msg)) {
+            intent.putExtra("errmsg", msg);
+        }
+        mActivity.startActivity(intent);
     }
 }

@@ -3,9 +3,13 @@ package com.thinkingdata.tadebugtool;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -22,7 +26,14 @@ import com.thinkingdata.tadebugtool.ui.adapter.AppInfoRecyclerViewAdapter;
 import com.thinkingdata.tadebugtool.ui.widget.FloatLayout;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupAppListView;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupHeaderView;
+import com.thinkingdata.tadebugtool.ui.widget.popup.PopupInputView;
+import com.thinkingdata.tadebugtool.utils.GetWinPoint;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
+
+import org.litepal.LitePal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LitePal.getDatabase();
         mActivity = this;
         setContentView(R.layout.activity_main);
         if (!TAUtil.checkFloatingPermission(mActivity)) {
@@ -42,11 +54,21 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new AppInfoRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(String packageName) {
-                FloatLayout floatLayout = FloatLayout.getInstance(mActivity);
-                floatLayout.init(packageName);
-                floatLayout.attachToWindow();
-                moveTaskToBack(true);
-                TAUtil.startAppWithPackageName(mActivity, packageName);
+                appListView.dismiss();
+                //弹出软键盘和editText
+                PopupInputView popupInputView = new PopupInputView(mActivity);
+                popupInputView.setOnSubmitClickListener(new PopupInputView.OnSubmitClickListener() {
+                    @Override
+                    public void onClick(List<String> appIDs) {
+                        popupInputView.dismiss();
+                        FloatLayout floatLayout = FloatLayout.getInstance(mActivity);
+                        floatLayout.init(packageName, appIDs);
+                        floatLayout.attachToWindow();
+                        moveTaskToBack(true);
+                        TAUtil.startAppWithPackageName(mActivity, packageName);
+                    }
+                });
+                popupInputView.show();
             }
         });
         appListView = new PopupAppListView(mActivity, adapter);
@@ -55,10 +77,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WindowManager.LayoutParams lp = mActivity.getWindow().getAttributes();
-                lp.alpha = 0.8f;
-                mActivity.getWindow().setAttributes(lp);
-                appListView.showAtLocation(mActivity.findViewById(R.id.root_CL), Gravity.BOTTOM | Gravity.START, 0, 0);
+                appListView.show();
             }
         });
 
@@ -73,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController((BottomNavigationView) this.findViewById(R.id.nav_view), navController);
 
         toolbar = this.findViewById(R.id.toolbar);
+        toolbar.setTitle("Global");
         setSupportActionBar(toolbar);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +100,37 @@ public class MainActivity extends AppCompatActivity {
                 showHeader();
             }
         });
+
+        //
+    }
+
+    private void handlerIntent() {
+        String msg = getIntent().getStringExtra("errmsg");
+        if (msg != null) {
+            getIntent().removeExtra("errmsg");
+            //show
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            builder.setTitle("连接失败")
+                    .setMessage(msg)
+                    .show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handlerIntent();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     private void showHeader() {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditText
+        android:background="@null"
+        android:id="@+id/input_appid_et"
+        android:layout_width="0dp"
+        android:cursorVisible="true"
+        android:singleLine="true"
+        android:textCursorDrawable="@null"
+        android:layout_weight="10"
+        android:layout_height="30dp"/>
+    <TextView
+        app:layout_constraintLeft_toRightOf="@+id/input_appid_et"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:text="-"
+        android:id="@+id/input_remove_tv"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="30dp"/>
+</LinearLayout>

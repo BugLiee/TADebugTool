@@ -6,6 +6,7 @@ package com.thinkingdata.tadebugtool.ui.widget.popup;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
@@ -73,5 +74,12 @@ public class PopupAppListView extends PopupWindow {
                 dismiss();
             }
         });
+    }
+
+    public void show() {
+        WindowManager.LayoutParams lp = mActivity.getWindow().getAttributes();
+        lp.alpha = 0.8f;
+        mActivity.getWindow().setAttributes(lp);
+        showAtLocation(mActivity.findViewById(R.id.root_CL), Gravity.BOTTOM | Gravity.START, 0, 0);
     }
 }
