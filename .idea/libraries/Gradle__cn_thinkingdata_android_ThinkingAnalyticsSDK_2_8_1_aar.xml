@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: cn.thinkingdata.android:ThinkingAnalyticsSDK:2.8.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/1ed6d816974d3933184ef9fd0b0928e6/transformed/jetified-ThinkingAnalyticsSDK-2.8.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1ed6d816974d3933184ef9fd0b0928e6/transformed/jetified-ThinkingAnalyticsSDK-2.8.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1ed6d816974d3933184ef9fd0b0928e6/transformed/jetified-ThinkingAnalyticsSDK-2.8.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/cn.thinkingdata.android/ThinkingAnalyticsSDK/2.8.1/ea4b639b1cbf39b587e0bb935d6bba2ad0cad264/ThinkingAnalyticsSDK-2.8.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

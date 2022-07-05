@@ -9,9 +9,11 @@
         <entry key="app/src/main/res/layout-v21/header_main.xml" value="0.14114583333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1038500506585613" />
         <entry key="app/src/main/res/layout/fragment_eventlist.xml" value="0.1890625" />
+        <entry key="app/src/main/res/layout/fragment_extension.xml" value="0.19739583333333333" />
         <entry key="app/src/main/res/layout/fragment_guidance.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/fragment_guidance_content.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19010416666666666" />
+        <entry key="app/src/main/res/layout/fragment_mock.xml" value="0.33" />
         <entry key="app/src/main/res/layout/guidance_menu.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/guidance_menu_item.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/layout/header_main.xml" value="0.25" />
@@ -23,10 +25,16 @@
         <entry key="app/src/main/res/layout/item_event_list.xml" value="0.10520833333333333" />
         <entry key="app/src/main/res/layout/item_event_props.xml" value="0.18645833333333334" />
         <entry key="app/src/main/res/layout/item_input_appid.xml" value="0.2125" />
+        <entry key="app/src/main/res/layout/item_mock_event_props.xml" value="0.1625" />
+        <entry key="app/src/main/res/layout/item_prop_type_chooser_simple.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/item_spinner.xml" value="0.2359375" />
         <entry key="app/src/main/res/layout/popup_info.xml" value="0.1" />
         <entry key="app/src/main/res/layout/popup_input_app_id.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/layout/popup_input_appid.xml" value="0.11803444782168186" />
+        <entry key="app/src/main/res/layout/popup_prop_type_chooser.xml" value="0.17604166666666668" />
+        <entry key="app/src/main/res/layout/popup_props_constructor_collection_view.xml" value="0.17708333333333334" />
+        <entry key="app/src/main/res/layout/popup_props_constructor_map_view.xml" value="0.17708333333333334" />
+        <entry key="app/src/main/res/layout/popup_props_constructor_normal_view.xml" value="0.17604166666666668" />
       </map>
     </option>
   </component>

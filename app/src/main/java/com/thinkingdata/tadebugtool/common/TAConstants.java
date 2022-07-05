@@ -13,6 +13,8 @@ package com.thinkingdata.tadebugtool.common;
  */
 public class TAConstants {
 
+    public static final String TIME_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+
     public static final String KEY_TA_TOOL_ACTION = "cn.thinkingdata.android.TAToolServer";
     public static final int VIEW_RADIUS = 90;
 

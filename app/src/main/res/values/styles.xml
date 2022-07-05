@@ -14,4 +14,5 @@
 <!--        <item name="android:windowEnterAnimation">@anim/app_header_in</item>-->
 <!--        <item name="android:windowExitAnimation">@anim/app_header_out</item>-->
     </style>
+
 </resources>

@@ -18,7 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.thinkingdata.tadebugtool.R;
-import com.thinkingdata.tadebugtool.ui.adapter.TagFragmentPagerAdapter;
+import com.thinkingdata.tadebugtool.ui.adapter.HomeTagFragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
         tabs.add("我是实例2");
         fragments.add(new EventListFragment());
         fragments.add(new EventListFragment());
-        viewPager.setAdapter(new TagFragmentPagerAdapter(getChildFragmentManager(), getLifecycle(), fragments));
+        viewPager.setAdapter(new HomeTagFragmentPagerAdapter(getChildFragmentManager(), getLifecycle(), fragments));
         mediator = new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

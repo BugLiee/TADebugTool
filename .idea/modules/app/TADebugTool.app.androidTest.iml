@@ -109,6 +109,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.multidex:multidex:2.0.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.constraintlayout:constraintlayout:2.1.2@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.litepal.android:java:3.0.0@aar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: cn.thinkingdata.android:ThinkingAnalyticsSDK:2.8.1@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.annotation:annotation-experimental:1.1.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.litepal.android:core:3.0.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.pangle.global:metasec_pgl:4.3.7-alpha.5-Pgl@aar" level="project" />

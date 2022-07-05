@@ -12,11 +12,9 @@ import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -34,12 +32,21 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.WindowManager;
 
-import androidx.annotation.Nullable;
+import com.thinkingdata.tadebugtool.common.TAConstants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * < TATool >.
@@ -331,6 +338,104 @@ public class TAUtil {
             return new BitmapDrawable(BitmapFactory.decodeByteArray(img,0, img.length));
         }
         return null;
+
+    }
+
+    /**
+     * < mergeJSONObject >.
+     *
+     * @param source sourceJSONObject
+     * @param dest destJSONObject
+     * @param timeZone TimeZone
+     */
+    public static void mergeJSONObject(final JSONObject source, JSONObject dest, TimeZone timeZone)
+            throws JSONException {
+        Iterator<String> sourceIterator = source.keys();
+        while (sourceIterator.hasNext()) {
+            String key = sourceIterator.next();
+            Object value = source.get(key);
+            if (value instanceof Date) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA);
+                if (null != timeZone) {
+                    dateFormat.setTimeZone(timeZone);
+                }
+                dest.put(key, dateFormat.format((Date) value));
+            } else if (value instanceof JSONArray) {
+                dest.put(key, formatJSONArray((JSONArray) value, timeZone));
+            } else if (value instanceof JSONObject) {
+                dest.put(key, formatJSONObject((JSONObject) value, timeZone));
+            } else {
+                dest.put(key, value);
+            }
+        }
+    }
+
+    /**
+     * < formatJSONArray with TimeZone >.
+     *
+     * @param jsonArr JSONArray
+     * @param timeZone TimeZone
+     * @return {@link JSONArray}
+     */
+    public static  JSONArray formatJSONArray(JSONArray jsonArr, TimeZone timeZone) {
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < jsonArr.length(); i++) {
+            Object value = jsonArr.opt(i);
+            if (value != null) {
+                if (value instanceof  Date) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA);
+                    if (null != timeZone) {
+                        dateFormat.setTimeZone(timeZone);
+                    }
+                    result.put(dateFormat.format((Date) value));
+                } else if (value instanceof JSONArray) {
+                    result.put(formatJSONArray((JSONArray) value, timeZone));
+                } else if (value instanceof JSONObject) {
+                    JSONObject newObject = formatJSONObject((JSONObject) value, timeZone);
+                    result.put(newObject);
+                } else {
+                    result.put(value);
+                }
+            }
+
+        }
+        return result;
+    }
+
+    /**
+     * < formatJSONObject with TimeZone >.
+     *
+     * @param jsonObject JSONObject
+     * @param timeZone TimeZone
+     * @return {@link JSONObject}
+     */
+    public static  JSONObject formatJSONObject(JSONObject jsonObject, TimeZone timeZone) {
+        JSONObject result = new JSONObject();
+        Iterator<String> iterator = jsonObject.keys();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            Object value = null;
+            try {
+                value = jsonObject.get(key);
+                if (value instanceof Date) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA);
+                    if (null != timeZone) {
+                        dateFormat.setTimeZone(timeZone);
+                    }
+                    result.put(key, dateFormat.format((Date) value));
+                } else if (value instanceof JSONArray) {
+                    result.put(key, formatJSONArray((JSONArray) value, timeZone));
+                } else if (value instanceof  JSONObject) {
+                    result.put(key, formatJSONObject((JSONObject) value, timeZone));
+                } else {
+                    result.put(key, value);
+                }
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
+
+        }
+        return result;
 
     }
 }
