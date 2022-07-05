@@ -30,6 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:id="@+id/btn11"
+        android:visibility="gone"
         style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

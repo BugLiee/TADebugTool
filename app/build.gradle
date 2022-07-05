@@ -43,4 +43,6 @@ dependencies {
     implementation 'org.litepal.android:java:3.0.0'
     implementation 'com.pangle.global:ads-sdk:4.5.0.3'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
+
+    implementation 'cn.thinkingdata.android:ThinkingAnalyticsSDK:latest.release'
 }

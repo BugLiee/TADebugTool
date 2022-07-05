@@ -7,6 +7,7 @@ package com.thinkingdata.tadebugtool.ui.adapter;
 import android.content.Context;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,15 +48,17 @@ public class AppInfoRecyclerViewAdapter extends RecyclerView.Adapter<AppInfoRecy
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ServiceInfo serviceInfo = appList.get(position).serviceInfo;
-        holder.appIconIV.setBackground(serviceInfo.applicationInfo.loadIcon(mContext.getPackageManager()));
-        holder.appNameTV.setText(serviceInfo.applicationInfo.loadLabel(mContext.getPackageManager()));
+        String appName = String.valueOf(serviceInfo.applicationInfo.loadLabel(mContext.getPackageManager()));
         String packageName = serviceInfo.applicationInfo.packageName;
+        Drawable appIcon = serviceInfo.applicationInfo.loadIcon(mContext.getPackageManager());
+        holder.appIconIV.setBackground(appIcon);
+        holder.appNameTV.setText(appName);
         holder.packageNameTV.setText(packageName);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    onItemClickListener.onClick(packageName);
+                    onItemClickListener.onClick(packageName, appName, appIcon);
                 }
             }
         });
@@ -87,7 +90,7 @@ public class AppInfoRecyclerViewAdapter extends RecyclerView.Adapter<AppInfoRecy
     }
 
     public interface OnItemClickListener{
-        void onClick(String packageName);
+        void onClick(String packageName, String appName, Drawable appIcon);
     }
 
 }

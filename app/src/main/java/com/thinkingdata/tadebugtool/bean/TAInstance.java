@@ -18,6 +18,44 @@ import java.io.Serializable;
  */
 public class TAInstance extends LitePalSupport implements Serializable {
 
+    @Column(defaultValue = "unknown")
+    private String timestamp;
+    @Column(defaultValue = "unknown")
+    private String instanceID;
+    @Column(defaultValue = "unknown")
+    private String distinctID;
+    @Column(defaultValue = "unknown")
+    private String accountID;
+    @Column(defaultValue = "unknown")
+    private String name;
+    @Column(defaultValue = "unknown")
+    private String url;
+    private boolean usable;
+    @Column(defaultValue = "unknown")
+    private String unUsableReason;
+    @Column(defaultValue = "unknown")
+    private String eventIDStr;
+    private boolean isMultiProcess;
+    @Column(defaultValue = "NORMAL")
+    private String trackState;
+    @Column(defaultValue = "NORMAL")
+    private String sdkMode;
+    @Column(defaultValue = "unknown")
+    private String autoTrackList;
+    private boolean enabledEncrypt;
+    @Column(defaultValue = "unknown")
+    private String encryptPublicKey;
+    @Column(defaultValue = "unknown")
+    private String symmetricEncryption;
+    @Column(defaultValue = "unknown")
+    private String asymmetricEncryption;
+    @Column(defaultValue = "unknown")
+    private String encryptVersion;
+    @Column(defaultValue = "unknown")
+    private String superProps;
+    private int flushInterval;
+    private int flushBulkSize;
+
     public String getTimestamp() {
         return timestamp;
     }
@@ -25,66 +63,6 @@ public class TAInstance extends LitePalSupport implements Serializable {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String timestamp;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String instanceID;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String distinctID;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String accountID;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String name;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String url;
-
-    @Column(unique = true)
-    private boolean usable;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String unUsableReason;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String eventIDStr;
-
-    @Column(unique = true)
-    private boolean isMultiProcess;
-
-    @Column(defaultValue = "NORMAL", unique = true)
-    private String trackState;
-
-    @Column(defaultValue = "NORMAL", unique = true)
-    private String sdkMode;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String autoTrackList;
-
-    @Column(unique = true)
-    private boolean enabledEncrypt;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String encryptPublicKey;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String symmetricEncryption;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String asymmetricEncryption;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String encryptVersion;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String superProps;
-
-    @Column(unique = true)
-    private int flushInterval;
 
     public String getInstanceID() {
         return instanceID;
@@ -245,8 +223,5 @@ public class TAInstance extends LitePalSupport implements Serializable {
     public void setFlushBulkSize(int flushBulkSize) {
         this.flushBulkSize = flushBulkSize;
     }
-
-    @Column(unique = true)
-    private int flushBulkSize;
 
 }

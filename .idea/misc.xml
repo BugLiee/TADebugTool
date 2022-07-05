@@ -3,12 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/shape_bottom_line.xml" value="0.1175" />
+        <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.1175" />
+        <entry key="app/src/main/res/drawable/view_water_selector.xml" value="0.18" />
+        <entry key="app/src/main/res/layout-v21/header_main.xml" value="0.14114583333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1038500506585613" />
+        <entry key="app/src/main/res/layout/fragment_eventlist.xml" value="0.1890625" />
         <entry key="app/src/main/res/layout/fragment_guidance.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/fragment_guidance_content.xml" value="0.19375" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/guidance_menu.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/guidance_menu_item.xml" value="0.16041666666666668" />
+        <entry key="app/src/main/res/layout/header_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_app_info.xml" value="0.190625" />
+        <entry key="app/src/main/res/layout/item_app_info_header.xml" value="0.18958333333333333" />
+        <entry key="app/src/main/res/layout/item_app_info_spinner.xml" value="0.26992753623188404" />
+        <entry key="app/src/main/res/layout/item_app_info_spinner_kv.xml" value="0.18125" />
+        <entry key="app/src/main/res/layout/item_app_info_spinner_simple.xml" value="0.15260416666666668" />
+        <entry key="app/src/main/res/layout/item_event_list.xml" value="0.10520833333333333" />
+        <entry key="app/src/main/res/layout/item_event_props.xml" value="0.18645833333333334" />
         <entry key="app/src/main/res/layout/item_input_appid.xml" value="0.2125" />
+        <entry key="app/src/main/res/layout/item_spinner.xml" value="0.2359375" />
+        <entry key="app/src/main/res/layout/popup_info.xml" value="0.1" />
         <entry key="app/src/main/res/layout/popup_input_app_id.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/layout/popup_input_appid.xml" value="0.11803444782168186" />
       </map>

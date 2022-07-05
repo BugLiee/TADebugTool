@@ -6,6 +6,7 @@ package com.thinkingdata.tadebugtool.ui.widget;
 
 import static com.thinkingdata.tadebugtool.common.TAConstants.KEY_TA_TOOL_ACTION;
 import static com.thinkingdata.tadebugtool.common.TAConstants.VIEW_RADIUS;
+import static com.thinkingdata.tadebugtool.utils.EventUtil.taTags;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -32,14 +34,19 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.thinkingdata.tadebugtool.MainActivity;
 import com.thinkingdata.tadebugtool.R;
+import com.thinkingdata.tadebugtool.bean.TADebugBehaviour;
+import com.thinkingdata.tadebugtool.bean.TAInstance;
+import com.thinkingdata.tadebugtool.utils.Base64Coder;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +107,10 @@ public class FloatLayout extends FrameLayout {
     private LinearLayout menuLayout;
     private boolean enableLog = false;
 
+    private String packageName = "";
+    private String appName = "";
+    private Drawable appIcon;
+
     private List<String> appIDs = new ArrayList<>();
 
     private FloatLayout(@NonNull Activity activity) {
@@ -118,7 +129,10 @@ public class FloatLayout extends FrameLayout {
         return instance;
     }
 
-    public void init(String packageName, List<String> appIDs) {
+    public void init(String packageName, String appName, Drawable appIcon, List<String> appIDs) {
+        this.packageName = packageName;
+        this.appName = appName;
+        this.appIcon = appIcon;
         this.appIDs.clear();
         this.appIDs.addAll(appIDs);
         mHandler = new MyHandler();
@@ -656,6 +670,7 @@ public class FloatLayout extends FrameLayout {
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            long ts = System.currentTimeMillis();
             mTAToolServer = ITAToolServer.Stub.asInterface(service);
             StringBuilder appIDStr = new StringBuilder();
             for (int i = 0; i < appIDs.size(); i++) {
@@ -665,8 +680,21 @@ public class FloatLayout extends FrameLayout {
                 }
             }
             try {
+                //检查appID并获取全局配置，预置属性等
                 String ret = mTAToolServer.checkAppID(appIDStr.toString());
-                if (!TextUtils.isEmpty(ret)) {
+                try {
+                    //构建实体进行持久化
+                    JSONObject jsonObject = new JSONObject(ret);
+                    jsonObject.put("instanceIDStr", appIDStr.toString());
+                    jsonObject.put("timestamp", ts);
+                    jsonObject.put("packageName", packageName);
+                    jsonObject.put("appName", appName);
+                    jsonObject.put("appIcon", new String(Base64Coder.encode(TAUtil.drawableToByte(appIcon))));
+                    TADebugBehaviour behaviour = new TADebugBehaviour(jsonObject);
+                    behaviour.save();
+                    //读取sdk等配置信息并关联到此次行为持久化
+                    requestSDKInfo();
+                } catch (JSONException e) {
                     unbindThis("请确认您的appID是否正确，或者移除不可用的ID : " + ret + " 后重新尝试!");
                 }
             } catch (RemoteException e) {
@@ -679,6 +707,57 @@ public class FloatLayout extends FrameLayout {
             mTAToolServer = null;
         }
     };
+
+    public static String mAppID = "";
+    private void requestSDKInfo() {
+        for (String appID : appIDs) {
+            try {
+                mAppID = appID;
+                String retStr = mTAToolServer.getAppAndSDKInfoWithAppID(appID);
+                try {
+                    JSONObject instanceJSon = new JSONObject(retStr);
+                    TAInstance instance = new TAInstance();
+                    instance.setAccountID(instanceJSon.optString("accountID"));
+                    instance.setDistinctID(instanceJSon.optString("distinctID"));
+                    instance.setName(instanceJSon.optString("name"));
+                    instance.setUrl(instanceJSon.optString("url"));
+                    instance.setSdkMode(instanceJSon.optString("sdkMode"));
+                    instance.setMultiProcess(instanceJSon.optBoolean("isMultiProcess"));
+                    instance.setAutoTrackList(instanceJSon.optString("autoTrackList"));
+                    instance.setEnabledEncrypt(instanceJSon.optBoolean("enabledEncrypt"));
+                    instance.setEncryptPublicKey(instanceJSon.optString("encryptPublicKey"));
+                    instance.setSymmetricEncryption(instanceJSon.optString("symmetricEncryption"));
+                    instance.setAsymmetricEncryption(instanceJSon.optString("asymmetricEncryption"));
+                    instance.setEncryptVersion(instanceJSon.optString("encryptVersion"));
+                    instance.setSuperProps(instanceJSon.optString("superProps"));
+                    instance.setFlushInterval(instanceJSon.optInt("flushInterval"));
+                    instance.setFlushBulkSize(instanceJSon.optInt("flushBulkSize"));
+                    instance.setTrackState(instanceJSon.optString("trackState"));
+                    instance.setTimestamp(String.valueOf(System.currentTimeMillis()));
+                    instance.setInstanceID(mAppID);
+                    //检查匹配和跨域问题
+                    instance.setUsable(true);
+                    instance.setUnUsableReason("我跨域了");
+                    instance.save();
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+                //
+                mTAToolServer.enableLog(true);
+                StringBuilder mOrder = new StringBuilder("logcat -s");
+                for (String tag : taTags) {
+                    String addStr = " " + tag + ":V";
+                    mOrder.append(addStr);
+                }
+                mTAToolServer.trackLog(mOrder.toString());
+                mTAToolServer.enableTransLog(true);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
 
     public void unbindThis(String msg) {
         if (mTAToolServer != null) {

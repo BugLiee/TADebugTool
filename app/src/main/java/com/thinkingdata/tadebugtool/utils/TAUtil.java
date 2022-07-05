@@ -16,9 +16,15 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -30,6 +36,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -288,8 +295,42 @@ public class TAUtil {
         }
     }
 
-    public boolean checkAppIDWithUrl(String appID, String url) {
+    /**
+     * < drawable 转 byte[] >.
+     *
+     * @author bugliee
+     * @create 2022/7/2
+     * @param drawable
+     * @return {@link byte[]}
+     */
+    public static synchronized byte[] drawableToByte(Drawable drawable) {
+        if (drawable != null) {
+            Bitmap bitmap = Bitmap
+                    .createBitmap(
+                            drawable.getIntrinsicWidth(),
+                            drawable.getIntrinsicHeight(),
+                            drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                                    : Bitmap.Config.RGB_565);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight());
+            drawable.draw(canvas);
+            int size = bitmap.getWidth() * bitmap.getHeight() * 4;
+            // 创建一个字节数组输出流,流的大小为size
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
+            // 设置位图的压缩格式，质量为100%，并放入字节数组输出流中
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            // 将字节数组输出流转化为字节数组byte[]
+            return baos.toByteArray();
+        }
+        return null;
+    }
 
-        return true;
+    public static synchronized Drawable byteToDrawable(byte[] img) {
+        if (img != null) {
+            return new BitmapDrawable(BitmapFactory.decodeByteArray(img,0, img.length));
+        }
+        return null;
+
     }
 }

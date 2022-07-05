@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/app_info_spinner_item_tv"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:layout_width="match_parent"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+    android:gravity="center"
+    android:layout_height="40dp">
+
+</TextView>

@@ -44,7 +44,7 @@ public class PopupCopyMessageView extends PopupWindow {
         onPopupDismissListener = listener;
     }
 
-    PopupCopyMessageView(Activity activity) {
+    public PopupCopyMessageView(Activity activity) {
         mActivity = activity;
         handler = new MyHandler();
         init();

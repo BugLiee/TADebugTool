@@ -1,36 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/nav_header_ll"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
-    android:gravity="bottom"
-    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingBottom="2dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/nav_header_desc"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/header_app_icon_iv"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:contentDescription="@string/nav_header_desc" />
+
 
     <TextView
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/header_app_icon_iv"
+        android:id="@+id/header_app_name_key_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
+        android:text="应用名："
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/header_app_name_key_tv"
+        android:id="@+id/header_app_name_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/nav_header_title"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/header_package_name_key_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle" />
-</LinearLayout>
+        android:layout_toRightOf="@+id/header_app_icon_iv"
+        android:layout_below="@+id/header_app_name_tv"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
+        android:text="包名："
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/header_package_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/header_package_name_key_tv"
+        android:layout_below="@+id/header_app_name_tv"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:layout_below="@+id/header_app_icon_iv"
+        android:id="@+id/header_deviceid_key_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
+        android:paddingTop="14dp"
+        android:text="设备号：" />
+
+    <TextView
+        android:layout_below="@+id/header_app_icon_iv"
+        android:layout_toRightOf="@+id/header_deviceid_key_tv"
+        android:id="@+id/header_deviceid_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
+        android:paddingTop="14dp" />
+
+    <TextView
+        android:layout_below="@+id/header_deviceid_tv"
+        android:id="@+id/header_appid_key_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
+        android:paddingTop="6dp"
+        android:text="appid：" />
+
+    <TextView
+        android:layout_below="@+id/header_deviceid_tv"
+        android:layout_toRightOf="@+id/header_appid_key_tv"
+        android:id="@+id/header_appid_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:paddingStart="@dimen/nav_header_vertical_spacing"
+        android:paddingTop="6dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/header_appid_tv"
+        android:layout_above="@+id/header_bottom_iv"
+        android:id="@+id/header_info_rv"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/header_bottom_iv"
+        android:background="@mipmap/ic_triangle_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="20dp"
+        android:layout_height="20dp"/>
+    </RelativeLayout>

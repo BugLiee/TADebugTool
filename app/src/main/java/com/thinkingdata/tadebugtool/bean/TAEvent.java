@@ -18,11 +18,22 @@ import java.io.Serializable;
  */
 public class TAEvent extends LitePalSupport implements Serializable {
 
-    @Column(defaultValue = "unknown", unique = true)
+    @Column(defaultValue = "unknown")
     private String eventID;
-
-    @Column(defaultValue = "unknown", unique = true)
+    @Column(defaultValue = "unknown")
     private String instanceName;
+    @Column(defaultValue = "unknown")
+    private String eventName;
+    @Column(defaultValue = "unknown")
+    private String props;
+    @Column(defaultValue = "unknown")
+    private String distinctID;
+    @Column(defaultValue = "unknown")
+    private String accountID;
+    @Column(defaultValue = "track")
+    private String eventType;
+    @Column(defaultValue = "unknown")
+    private String timeStamp;
 
     public String getEventID() {
         return eventID;
@@ -87,22 +98,4 @@ public class TAEvent extends LitePalSupport implements Serializable {
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
     }
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String eventName;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String props;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String distinctID;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String accountID;
-
-    @Column(defaultValue = "track", unique = true)
-    private String eventType;
-
-    @Column(defaultValue = "unknown", unique = true)
-    private String timeStamp;
 }

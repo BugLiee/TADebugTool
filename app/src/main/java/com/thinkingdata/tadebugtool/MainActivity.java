@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,6 +28,7 @@ import com.thinkingdata.tadebugtool.ui.widget.FloatLayout;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupAppListView;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupHeaderView;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupInputView;
+import com.thinkingdata.tadebugtool.utils.EventUtil;
 import com.thinkingdata.tadebugtool.utils.GetWinPoint;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventUtil.castStr2Event("");
         LitePal.getDatabase();
         mActivity = this;
         setContentView(R.layout.activity_main);
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         AppInfoRecyclerViewAdapter adapter = new AppInfoRecyclerViewAdapter(mActivity, TAUtil.queryAllPackages(mActivity));
         adapter.setOnItemClickListener(new AppInfoRecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onClick(String packageName) {
+            public void onClick(String packageName, String appName, Drawable appIcon) {
                 appListView.dismiss();
                 //弹出软键盘和editText
                 PopupInputView popupInputView = new PopupInputView(mActivity);
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(List<String> appIDs) {
                         popupInputView.dismiss();
                         FloatLayout floatLayout = FloatLayout.getInstance(mActivity);
-                        floatLayout.init(packageName, appIDs);
+                        floatLayout.init(packageName, appName, appIcon, appIDs);
                         floatLayout.attachToWindow();
                         moveTaskToBack(true);
                         TAUtil.startAppWithPackageName(mActivity, packageName);
