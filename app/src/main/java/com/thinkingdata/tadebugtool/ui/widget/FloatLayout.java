@@ -40,8 +40,9 @@ import androidx.cardview.widget.CardView;
 
 import com.thinkingdata.tadebugtool.MainActivity;
 import com.thinkingdata.tadebugtool.R;
-import com.thinkingdata.tadebugtool.bean.TADebugBehaviour;
 import com.thinkingdata.tadebugtool.bean.TAInstance;
+import com.thinkingdata.tadebugtool.ui.widget.popup.PopupInfoView;
+import com.thinkingdata.tadebugtool.ui.widget.popup.PopupLogView;
 import com.thinkingdata.tadebugtool.utils.Base64Coder;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
@@ -50,6 +51,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -68,22 +70,12 @@ public class FloatLayout extends FrameLayout {
     @SuppressLint("StaticFieldLeak")
     private static volatile FloatLayout instance = null;
     private final Activity mActivity;
-    private final CardView[] menuItems = new CardView[2];
-    //内部解锁相关
-    //锁屏9键坐标
-    private final int[] loc1 = new int[2];
-    private final int[] loc2 = new int[2];
-    private final int[] loc3 = new int[2];
-    private final int[] loc4 = new int[2];
-    private final int[] loc5 = new int[2];
-    private final int[] loc6 = new int[2];
-    private final int[] loc7 = new int[2];
-    private final int[] loc8 = new int[2];
-    private final int[] loc9 = new int[2];
+    private CardView[] menuItems;
+
+    private PopupInfoView popupInfoView = null;
+    private PopupLogView popupLogView = null;
+
     CardView rootItem;
-    List<Integer> keyList = new ArrayList<>();
-    List<Integer> secureList = new ArrayList<>();
-    List<int[]> sourceList = new ArrayList<>();
     private WindowManager.LayoutParams mLayoutParams;
     private WindowManager.LayoutParams mMenuLayoutParams;
     private WindowManager mWindowManager;
@@ -105,13 +97,29 @@ public class FloatLayout extends FrameLayout {
     private boolean clickRoot = false;
     private MyHandler mHandler = null;
     private LinearLayout menuLayout;
-    private boolean enableLog = false;
 
     private String packageName = "";
     private String appName = "";
     private Drawable appIcon;
 
     private List<String> appIDs = new ArrayList<>();
+
+
+    private boolean isAdvance;
+
+    public void setAdvance() {
+        isAdvance = true;
+    }
+
+    public interface ServiceConnectedListener{
+        void onConnected(boolean isConnected);
+    }
+
+    private ServiceConnectedListener serviceConnectedListener;
+
+    public void setServiceConnectedListener(ServiceConnectedListener serviceConnectedListener) {
+        this.serviceConnectedListener = serviceConnectedListener;
+    }
 
     private FloatLayout(@NonNull Activity activity) {
         super(activity);
@@ -130,11 +138,20 @@ public class FloatLayout extends FrameLayout {
     }
 
     public void init(String packageName, String appName, Drawable appIcon, List<String> appIDs) {
+        if (isAdvance) {
+            menuItems = new CardView[4];
+
+        } else {
+            menuItems = new CardView[2];
+
+        }
         this.packageName = packageName;
         this.appName = appName;
         this.appIcon = appIcon;
         this.appIDs.clear();
-        this.appIDs.addAll(appIDs);
+        if (appIDs != null) {
+            this.appIDs.addAll(appIDs);
+        }
         mHandler = new MyHandler();
         mWindowManager = (WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE);
         rotation = mWindowManager.getDefaultDisplay().getRotation();
@@ -144,10 +161,12 @@ public class FloatLayout extends FrameLayout {
         initMenu();
         initRootItem();
 
-        Intent intent = new Intent();
-        intent.setAction(KEY_TA_TOOL_ACTION);
-        intent.setPackage(packageName);
-        mActivity.getApplicationContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        if (!isAdvance){
+            Intent intent = new Intent();
+            intent.setAction(KEY_TA_TOOL_ACTION);
+            intent.setPackage(packageName);
+            mActivity.getApplicationContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -172,55 +191,8 @@ public class FloatLayout extends FrameLayout {
         mLayoutParams.height = radius * 2;
         mLayoutParams.x = radius;
         mLayoutParams.y = radius * 5 / 2;
-        //解锁相关
-        //初始化9键
-        initSecureKey();
         //menu layout params
         mMenuLayoutParams = mLayoutParams;
-    }
-
-    private void initSecureKey() {
-        int oWidth = radius * 2;
-        int centerLocX = screenWidth / 2;
-        int centerLocY = screenHeight / 2;
-
-        loc1[0] = centerLocX - oWidth * 2;
-        loc1[1] = centerLocY - oWidth * 2;
-        loc2[0] = centerLocX;
-        loc2[1] = centerLocY - oWidth * 2;
-        loc3[0] = centerLocX + oWidth * 2;
-        loc3[1] = centerLocY - oWidth * 2;
-        loc4[0] = centerLocX - oWidth * 2;
-        loc4[1] = centerLocY;
-        loc5[0] = centerLocX;
-        loc5[1] = centerLocY;
-        loc6[0] = centerLocX + oWidth * 2;
-        loc6[1] = centerLocY;
-        loc7[0] = centerLocX - oWidth * 2;
-        loc7[1] = centerLocY + oWidth * 2;
-        loc8[0] = centerLocX;
-        loc8[1] = centerLocY + oWidth * 2;
-        loc9[0] = centerLocX + oWidth * 2;
-        loc9[1] = centerLocY + oWidth * 2;
-
-        sourceList.add(loc1);
-        sourceList.add(loc2);
-        sourceList.add(loc3);
-        sourceList.add(loc4);
-        sourceList.add(loc5);
-        sourceList.add(loc6);
-        sourceList.add(loc7);
-        sourceList.add(loc8);
-        sourceList.add(loc9);
-
-        secureList.add(4);
-        secureList.add(1);
-        secureList.add(2);
-        secureList.add(3);
-        secureList.add(6);
-        secureList.add(9);
-        secureList.add(8);
-        secureList.add(7);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -232,6 +204,85 @@ public class FloatLayout extends FrameLayout {
         blankItem.setRadius(radius / 2f);
         blankItem.setCardBackgroundColor(Color.TRANSPARENT);
         blankItem.setVisibility(INVISIBLE);
+
+        if (isAdvance) {
+            CardView logItem = new CardView(mActivity);
+            logItem.setRadius(radius / 2f);
+            TextView logItemTV = new TextView(mActivity);
+            logItemTV.setGravity(Gravity.CENTER);
+            logItem.setBackgroundResource(R.mipmap.ic_log);
+            logItem.addView(logItemTV);
+            logItem.setVisibility(INVISIBLE);
+
+            CardView infoItem = new CardView(mActivity);
+            infoItem.setRadius(radius / 2f);
+            TextView infoItemTV = new TextView(mActivity);
+            infoItemTV.setGravity(Gravity.CENTER);
+            infoItem.setBackgroundResource(R.mipmap.ic_info);
+            infoItem.addView(infoItemTV);
+            infoItem.setVisibility(INVISIBLE);
+
+            logItem.setOnClickListener(v -> {
+                if (popupInfoView != null) {
+                    popupInfoView.unbindThis();
+                    mWindowManager.removeView(popupInfoView);
+                    popupInfoView = null;
+                }
+                if (popupLogView == null) {
+                    popupLogView = PopupLogView.getInstance(mActivity);
+                    popupLogView.init(packageName);
+                    popupLogView.setRadius(radius / 2);
+
+                    WindowManager.LayoutParams p = TAUtil.getLayoutParams(mActivity.getApplicationContext());
+//                    p.x = mLayoutParams.x + radius * 2;
+                    p.x = 0;
+                    p.y = mLayoutParams.y + radius * 3;
+//                    p.width = screenWidth - p.x * 2;
+                    p.width = screenWidth;
+                    p.height = screenHeight > screenWidth ? p.width * 3 / 2 : p.width * 2 / 3;
+                    p.height = Math.min(p.height, screenHeight - p.y);
+                    p.flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+                    mWindowManager.addView(popupLogView, p);
+                } else {
+                    popupLogView.unbindThis();
+                    mWindowManager.removeView(popupLogView);
+                    popupLogView = null;
+                }
+            });
+            infoItem.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (popupLogView != null) {
+                        popupLogView.unbindThis();
+                        mWindowManager.removeView(popupLogView);
+                        popupLogView = null;
+                    }
+                    if (popupInfoView == null) {
+                        popupInfoView = PopupInfoView.getInstance(mActivity);
+                        popupInfoView.init(packageName);
+                        popupInfoView.setRadius(radius / 2f);
+
+                        WindowManager.LayoutParams p = TAUtil.getLayoutParams(mActivity.getApplicationContext());
+                        p.x = 0;
+                        p.y = mLayoutParams.y + radius * 3;
+                        p.width = screenWidth;
+                        p.height = screenHeight > screenWidth ? p.width * 3 / 2 : p.width * 2 / 3;
+                        p.height = Math.min(p.height, screenHeight - p.y);
+                        p.flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+                        mWindowManager.addView(popupInfoView, p);
+                    } else {
+                        popupInfoView.unbindThis();
+                        mWindowManager.removeView(popupInfoView);
+                        popupInfoView = null;
+                    }
+                }
+            });
+
+            menuItems[1] = logItem;
+            menuItems[2] = infoItem;
+        }
 
         CardView settingsItem = new CardView(mActivity);
         settingsItem.setRadius(radius / 2f);
@@ -255,10 +306,14 @@ public class FloatLayout extends FrameLayout {
                 }, 400);
             }
         });
+        if (isAdvance) {
+            menuItems[0] = blankItem;
+            menuItems[3] = settingsItem;
+        } else {
+            menuItems[0] = blankItem;
+            menuItems[1] = settingsItem;
+        }
 
-
-        menuItems[0] = blankItem;
-        menuItems[1] = settingsItem;
     }
 
     private void initScreenSize() {
@@ -282,22 +337,6 @@ public class FloatLayout extends FrameLayout {
                 if (status == 1) {
                     performShowOrHide();
                 } else {
-                    //解锁
-                    if (!enableLog) {
-                        if (keyList.size() == 8) {
-                            enableLog = true;
-                            for (int i = 0; i < keyList.size(); i++) {
-                                if (!keyList.get(i).equals(secureList.get(i))) {
-                                    enableLog = false;
-                                    break;
-                                }
-                            }
-                        }
-                        keyList.clear();
-                        if (enableLog) {
-                            Log.d("bugliee", "恭喜你解锁成功！");
-                        }
-                    }
                     rootItem.setOnTouchListener(rootItemOnTouchListener);
                     if (status == 2 && showItems < 0) {
                         int cx = mLayoutParams.x;
@@ -350,7 +389,6 @@ public class FloatLayout extends FrameLayout {
             case MotionEvent.ACTION_MOVE:
                 float x = event.getRawX();
                 float y = event.getRawY();
-                checkKeyLoc(x, y);
                 //这里转int，避免出现int 和 float的计算，因为layoutParam.x/y 是int类型
                 int dx = (int) (x - originX);
                 int dy = (int) (y - originY);
@@ -394,18 +432,6 @@ public class FloatLayout extends FrameLayout {
         }
 
         return super.onTouchEvent(event);
-    }
-
-    private void checkKeyLoc(float x, float y) {
-        for (int i = 0; i < sourceList.size(); i++) {
-            int[] loc = sourceList.get(i);
-            if (x >= loc[0] - radius && x <= loc[0] + radius && y >= loc[1] - radius && y <= loc[1] + radius) {
-                if (!keyList.contains(i + 1)) {
-                    keyList.add(i + 1);
-                    break;
-                }
-            }
-        }
     }
 
     private void performShowOrHide() {
@@ -670,8 +696,11 @@ public class FloatLayout extends FrameLayout {
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            long ts = System.currentTimeMillis();
             mTAToolServer = ITAToolServer.Stub.asInterface(service);
+            if (serviceConnectedListener != null) {
+                serviceConnectedListener.onConnected(true);
+            }
+
             StringBuilder appIDStr = new StringBuilder();
             for (int i = 0; i < appIDs.size(); i++) {
                 appIDStr.append(appIDs.get(i));
@@ -685,15 +714,15 @@ public class FloatLayout extends FrameLayout {
                 try {
                     //构建实体进行持久化
                     JSONObject jsonObject = new JSONObject(ret);
-                    jsonObject.put("instanceIDStr", appIDStr.toString());
+                    /*jsonObject.put("instanceIDStr", appIDStr.toString());
                     jsonObject.put("timestamp", ts);
                     jsonObject.put("packageName", packageName);
                     jsonObject.put("appName", appName);
                     jsonObject.put("appIcon", new String(Base64Coder.encode(TAUtil.drawableToByte(appIcon))));
                     TADebugBehaviour behaviour = new TADebugBehaviour(jsonObject);
-                    behaviour.save();
+                    behaviour.save();*/
                     //读取sdk等配置信息并关联到此次行为持久化
-                    requestSDKInfo();
+                    requestSDKInfo(jsonObject);
                 } catch (JSONException e) {
                     unbindThis("请确认您的appID是否正确，或者移除不可用的ID : " + ret + " 后重新尝试!");
                 }
@@ -705,45 +734,42 @@ public class FloatLayout extends FrameLayout {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mTAToolServer = null;
+            if (serviceConnectedListener != null) {
+                serviceConnectedListener.onConnected(false);
+            }
         }
     };
 
     public static String mAppID = "";
-    private void requestSDKInfo() {
+    public static String mAppName = "";
+
+    private void requestSDKInfo(JSONObject publicConfig) {
         for (String appID : appIDs) {
             try {
                 mAppID = appID;
                 String retStr = mTAToolServer.getAppAndSDKInfoWithAppID(appID);
                 try {
                     JSONObject instanceJSon = new JSONObject(retStr);
-                    TAInstance instance = new TAInstance();
-                    instance.setAccountID(instanceJSon.optString("accountID"));
-                    instance.setDistinctID(instanceJSon.optString("distinctID"));
-                    instance.setName(instanceJSon.optString("name"));
-                    instance.setUrl(instanceJSon.optString("url"));
-                    instance.setSdkMode(instanceJSon.optString("sdkMode"));
-                    instance.setMultiProcess(instanceJSon.optBoolean("isMultiProcess"));
-                    instance.setAutoTrackList(instanceJSon.optString("autoTrackList"));
-                    instance.setEnabledEncrypt(instanceJSon.optBoolean("enabledEncrypt"));
-                    instance.setEncryptPublicKey(instanceJSon.optString("encryptPublicKey"));
-                    instance.setSymmetricEncryption(instanceJSon.optString("symmetricEncryption"));
-                    instance.setAsymmetricEncryption(instanceJSon.optString("asymmetricEncryption"));
-                    instance.setEncryptVersion(instanceJSon.optString("encryptVersion"));
-                    instance.setSuperProps(instanceJSon.optString("superProps"));
-                    instance.setFlushInterval(instanceJSon.optInt("flushInterval"));
-                    instance.setFlushBulkSize(instanceJSon.optInt("flushBulkSize"));
-                    instance.setTrackState(instanceJSon.optString("trackState"));
-                    instance.setTimestamp(String.valueOf(System.currentTimeMillis()));
-                    instance.setInstanceID(mAppID);
+                    String timestamp = String.valueOf(System.currentTimeMillis());
+                    mAppName = instanceJSon.optString("name") + timestamp;
+                    TAUtil.mergeJSONObject(publicConfig, instanceJSon, TimeZone.getTimeZone("GMT:+8:00"));
+                    instanceJSon.put("timestamp", timestamp);
+                    instanceJSon.put("instanceID", mAppID);
                     //检查匹配和跨域问题
-                    instance.setUsable(true);
-                    instance.setUnUsableReason("我跨域了");
+                    instanceJSon.put("usable", true);
+                    instanceJSon.put("unUsableReason", "我跨域了");
+
+                    instanceJSon.put("packageName", packageName);
+                    instanceJSon.put("appName", appName);
+                    instanceJSon.put("appIcon", new String(Base64Coder.encode(TAUtil.drawableToByte(appIcon))));
+
+                    TAInstance instance = new TAInstance(instanceJSon);
                     instance.save();
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
                 //
-                mTAToolServer.enableLog(true);
+                //开始收集SDK日志
                 StringBuilder mOrder = new StringBuilder("logcat -s");
                 for (String tag : taTags) {
                     String addStr = " " + tag + ":V";
@@ -765,6 +791,7 @@ public class FloatLayout extends FrameLayout {
                 mTAToolServer.unbindThis();
                 mTAToolServer = null;
                 mActivity.getApplicationContext().unbindService(serviceConnection);
+                serviceConnection.onServiceDisconnected(null);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

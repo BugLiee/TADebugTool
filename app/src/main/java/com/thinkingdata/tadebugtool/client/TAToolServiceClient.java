@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.thinkingdata.tadebugtool.MainActivity;
 import com.thinkingdata.tadebugtool.bean.TAEvent;
 import com.thinkingdata.tadebugtool.ui.widget.FloatLayout;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupLogView;
@@ -54,7 +55,19 @@ public class TAToolServiceClient extends Service {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {
-                handleMsg(mLogStr);
+                if (MainActivity.isAdvance) {
+                    String strLogs = popupLogView.getLogTVText();
+                    if (strLogs.isEmpty()) {
+                        strLogs = mLogStr;
+                    } else {
+                        strLogs += "\r\n" + mLogStr;
+                    }
+                    popupLogView.setLogTVText(strLogs);
+                    //log View滚动到底部
+                    popupLogView.scrollLogTVToBottom();
+                } else {
+                    handleMsg(mLogStr);
+                }
             }
         }
     }
@@ -74,7 +87,6 @@ public class TAToolServiceClient extends Service {
         } else {
             content = msg;
         }
-        boolean findEnd = false;
         Matcher matcherPrefix = prefixPattern.matcher(content);
         if (matcherPrefix.find()) {
             //找到头
@@ -92,30 +104,28 @@ public class TAToolServiceClient extends Service {
                 //找到结尾 ，添加 "}"
                 subContent = subContent.substring(0, pos);
                 subContent += "}";
-                findEnd = true;
-            }
-            //剔除上报成功事件
-            if (findEnd && !subContent.contains("#flush_time")) {
-                //替换 时间和tag
-                subContent = subContent.replace(findStr.replace("{", ""), "");
-                try {
-                    cEventJson = new JSONObject(subContent);
-                    //存数据库
-                    TAEvent event = new TAEvent();
-                    event.setEventID(cEventJson.optString("#uuid"));
-                    event.setEventName(cEventJson.optString("#event_name"));
-                    event.setEventType(cEventJson.optString("#type"));
-                    event.setDistinctID(cEventJson.optString("#distinct_id"));
-                    event.setAccountID(cEventJson.optString("#account_id"));
-                    event.setProps(cEventJson.optString("#properties"));
-                    event.setTimeStamp(timeStr);
-                    event.setInstanceName(FloatLayout.mAppID);
-                    event.save();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                //剔除上报成功事件
+                if (!subContent.contains("#flush_time") && subContent.contains("#type")) {
+                    //替换 时间和tag
+                    subContent = subContent.replace(findStr.replace("{", ""), "");
+                    try {
+                        cEventJson = new JSONObject(subContent);
+                        cEventJson.put("time", timeStr);
+                        cEventJson.put("instanceName", FloatLayout.mAppName);
+                        //存数据库
+                        TAEvent event = new TAEvent(cEventJson);
+                        event.save();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    isLoop = true;
+                    handleMsg(lastMsg);
                 }
+            } else {
+                //没找到
                 isLoop = true;
-                handleMsg(lastMsg);
+                lastMsg = subContent;
             }
         } else {
             isLoop = false;

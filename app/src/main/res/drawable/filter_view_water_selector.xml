@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="#E4E9EA"
+    android:radius="?actionBarSize"
+    tools:targetApi="lollipop">  <!-- 点击后水波纹的颜色效果 -->
+    <item>
+        <!-- 默认显示的颜色效果 -->
+        <shape>
+            <!--圆形效果-->
+<!--            <corners android:radius="?actionBarSize" />-->
+            <solid android:color="#33A2B5" />
+        </shape>
+    </item>
+</ripple>

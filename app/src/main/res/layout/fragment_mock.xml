@@ -10,10 +10,10 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:background="#BC8D8D"
             android:id="@+id/mock_history_title"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="#BC8D8D"
             android:gravity="center"
             android:text="历史模拟数据"
             android:textColor="#ffffff" />
@@ -32,14 +32,18 @@
         android:orientation="vertical">
 
         <TextView
-            android:background="#BCB78D"
             android:id="@+id/mock_current_title"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="#BCB78D"
             android:gravity="center"
             android:text="模拟发送事件"
             android:textColor="#ffffff" />
-
+        <LinearLayout
+            android:id="@+id/mock_current_event_content_ll"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -53,132 +57,156 @@
                 <RadioButton
                     android:id="@+id/mock_normal_rb"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="一般事件" />
 
                 <RadioButton
                     android:id="@+id/mock_profile_rb"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="用户事件" />
             </RadioGroup>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
-                android:id="@+id/mock_appid_tv"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
+                android:id="@+id/mock_public_config_tv"
+                android:text="基本配置"
+                android:textColor="#ffffff"
                 android:gravity="center"
-                android:text="appID："
-                android:textColor="#ffffff" />
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/mock_public_config_ll"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/mock_appid_et"
-                android:singleLine="true"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="3" />
+                <TextView
+                    android:id="@+id/mock_appid_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="appID："
+                    android:textColor="#ffffff" />
+
+                <EditText
+                    android:id="@+id/mock_appid_et"
+                    android:text="1b1c1fef65e3482bad5c9d0e6a823356"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="3"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/mock_url_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="serverUrl："
+                    android:textColor="#ffffff" />
+
+                <EditText
+                    android:id="@+id/mock_url_et"
+                    android:text="https://receiver.ta.thinkingdata.cn/"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="3"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/mock_account_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="accountID："
+                    android:textColor="#ffffff" />
+
+                <EditText
+                    android:text="account11"
+                    android:id="@+id/mock_account_et"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="3"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/mock_distinct_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="distinctID："
+                    android:textColor="#ffffff" />
+
+                <EditText
+                    android:text="distinct222"
+                    android:id="@+id/mock_distinct_et"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="3"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/mock_event_name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="eventName："
+                    android:textColor="#ffffff" />
+
+                <EditText
+                    android:id="@+id/mock_event_name_et"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="3"
+                    android:singleLine="true" />
+            </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/mock_url_tv"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="serverUrl："
-                android:textColor="#ffffff" />
-
-            <EditText
-                android:id="@+id/mock_url_et"
-                android:singleLine="true"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="3" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/mock_account_tv"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="accountID："
-                android:textColor="#ffffff" />
-
-            <EditText
-                android:id="@+id/mock_account_et"
-                android:singleLine="true"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="3" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/mock_distinct_tv"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="distinctID："
-                android:textColor="#ffffff" />
-
-            <EditText
-                android:id="@+id/mock_distinct_et"
-                android:singleLine="true"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="3" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/mock_event_name_tv"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="eventName："
-                android:textColor="#ffffff" />
-
-            <EditText
-                android:id="@+id/mock_event_name_et"
-                android:singleLine="true"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="3" />
-        </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/mock_props_header"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -190,12 +218,13 @@
 
                 <TextView
                     android:id="@+id/mock_current_prop_tv"
-                    android:text="当前属性"
-                    android:gravity="center"
-                    android:textColor="#ffffff"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="当前属性"
+                    android:textColor="#ffffff" />
+
                 <TextView
                     android:id="@+id/mock_add_prop_tv"
                     android:layout_width="0dp"
@@ -205,15 +234,43 @@
                     android:text="添加属性"
                     android:textColor="#ffffff" />
             </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
-                android:background="#87C8A1"
-                android:visibility="gone"
-                android:layout_below="@+id/mock_props_header"
                 android:id="@+id/mock_props_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mock_props_header"
+                android:background="#87C8A1"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/mock_props_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mock_props_rv"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/mock_current_prop_clear"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="清除"
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/mock_add_prop_positive"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/text_positive"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
         </RelativeLayout>
 
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

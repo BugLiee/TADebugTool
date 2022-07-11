@@ -11,14 +11,14 @@
         android:background="#9EB386">
 
         <RelativeLayout
-            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
             <LinearLayout
-                android:id="@+id/popup_prop_constructor_container_ll"
-                android:layout_above="@+id/popup_prop_constructor_bottom_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/popup_prop_constructor_bottom_ll"
                 android:background="#9EB386"
                 android:orientation="vertical">
 
@@ -52,61 +52,76 @@
                         android:singleLine="true" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/popup_prop_constructor_input_item_ll"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="#B3BCDA">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="itemKey：" />
+                    <LinearLayout
+                        android:id="@+id/popup_prop_constructor_container_ll"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/input_prop_item_key_et"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:singleLine="true" />
+                        <LinearLayout
+                            android:id="@+id/popup_prop_constructor_input_item_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="#B3BCDA">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="itemValue：" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="itemKey：" />
 
-                    <EditText
-                        android:id="@+id/input_prop_item_value_et"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:singleLine="true" />
-                </LinearLayout>
+                            <EditText
+                                android:id="@+id/input_prop_item_key_et"
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:singleLine="true" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="itemValue：" />
+
+                            <EditText
+                                android:id="@+id/input_prop_item_value_et"
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/popup_prop_constructor_bottom_ll"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/popup_prop_constructor_add_list_tv"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/add" />
+
                 <TextView
                     android:id="@+id/popup_prop_constructor_positive_tv"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/text_positive" />
             </LinearLayout>

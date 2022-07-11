@@ -4,6 +4,7 @@
 
 package com.thinkingdata.tadebugtool.bean;
 
+import org.json.JSONObject;
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
@@ -18,6 +19,43 @@ import java.io.Serializable;
  */
 public class TAInstance extends LitePalSupport implements Serializable {
 
+    public TAInstance(JSONObject instanceJSon) {
+        setTimestamp(instanceJSon.optString("timestamp"));
+        setInstanceID(instanceJSon.optString("instanceID"));
+        setDistinctID(instanceJSon.optString("distinctID"));
+        setAccountID(instanceJSon.optString("accountID"));
+        setName(instanceJSon.optString("name"));
+        setUrl(instanceJSon.optString("url"));
+        setAppVersionCode(instanceJSon.optString("appVersionCode"));
+        setAppVersionName(instanceJSon.optString("appVersionName"));
+        setPresetProps(instanceJSon.optString("presetProps"));
+        setLibVersion(instanceJSon.optString("libVersion"));
+        setAppName(instanceJSon.optString("appName"));
+        setAppIcon(instanceJSon.optString("appIcon"));
+        setPackageName(instanceJSon.optString("packageName"));
+        setUsable(instanceJSon.optBoolean("usable"));
+        setUnUsableReason(instanceJSon.optString("unUsableReason"));
+        setMultiProcess(instanceJSon.optBoolean("isMultiProcess"));
+        setTrackState(instanceJSon.optString("trackState"));
+        setSdkMode(instanceJSon.optString("sdkMode"));
+        setAutoTrackList(instanceJSon.optString("autoTrackList"));
+        setEnabledEncrypt(instanceJSon.optBoolean("enabledEncrypt"));
+        setEncryptPublicKey(instanceJSon.optString("encryptPublicKey"));
+        setSymmetricEncryption(instanceJSon.optString("symmetricEncryption"));
+        setAsymmetricEncryption(instanceJSon.optString("asymmetricEncryption"));
+        setEncryptVersion(instanceJSon.optString("encryptVersion"));
+        setSuperProps(instanceJSon.optString("superProps"));
+        setFlushInterval(instanceJSon.optInt("flushInterval"));
+        setFlushBulkSize(instanceJSon.optInt("flushBulkSize"));
+        setEnableLog(instanceJSon.optBoolean("enableLog"));
+        setEnableBGStart(instanceJSon.optBoolean("enableBGStart"));
+        setSetCalibrateTime(instanceJSon.optBoolean("setCalibrateTime"));
+        setDisPresetProps(instanceJSon.optString("disPresetProps"));
+        setCrashConfig(instanceJSon.optString("crashConfig"));
+        setMainProcessName(instanceJSon.optString("mainProcessName"));
+        setRetentionDays(instanceJSon.optInt("retentionDays"));
+        setDatabaseLimit(instanceJSon.optInt("databaseLimit"));
+    }
     @Column(defaultValue = "unknown")
     private String timestamp;
     @Column(defaultValue = "unknown")
@@ -30,11 +68,23 @@ public class TAInstance extends LitePalSupport implements Serializable {
     private String name;
     @Column(defaultValue = "unknown")
     private String url;
+    @Column(defaultValue = "unknown")
+    private String appVersionCode;
+    @Column(defaultValue = "unknown")
+    private String appVersionName;
+    @Column(defaultValue = "unknown")
+    private String presetProps;
+    @Column(defaultValue = "unknown")
+    private String libVersion;
+    @Column(defaultValue = "unknown")
+    private String appName;
+    @Column(defaultValue = "unknown")
+    private String appIcon;
+    @Column(defaultValue = "unknown")
+    private String packageName;
     private boolean usable;
     @Column(defaultValue = "unknown")
     private String unUsableReason;
-    @Column(defaultValue = "unknown")
-    private String eventIDStr;
     private boolean isMultiProcess;
     @Column(defaultValue = "NORMAL")
     private String trackState;
@@ -55,6 +105,137 @@ public class TAInstance extends LitePalSupport implements Serializable {
     private String superProps;
     private int flushInterval;
     private int flushBulkSize;
+    private boolean enableLog;
+    private boolean enableBGStart;
+    private boolean setCalibrateTime;
+    @Column(defaultValue = "unknown")
+    private String disPresetProps;
+    @Column(defaultValue = "unknown")
+    private String crashConfig;
+    @Column(defaultValue = "unknown")
+    private String mainProcessName;
+    private int retentionDays;
+    private int databaseLimit;
+
+    public boolean isSetCalibrateTime() {
+        return setCalibrateTime;
+    }
+
+    public void setSetCalibrateTime(boolean setCalibrateTime) {
+        this.setCalibrateTime = setCalibrateTime;
+    }
+
+    public String getAppVersionCode() {
+        return appVersionCode;
+    }
+
+    public void setAppVersionCode(String appVersionCode) {
+        this.appVersionCode = appVersionCode;
+    }
+
+    public String getPresetProps() {
+        return presetProps;
+    }
+
+    public void setPresetProps(String presetProps) {
+        this.presetProps = presetProps;
+    }
+
+    public String getAppVersionName() {
+        return appVersionName;
+    }
+
+    public void setAppVersionName(String appVersionName) {
+        this.appVersionName = appVersionName;
+    }
+
+    public String getLibVersion() {
+        return libVersion;
+    }
+
+    public void setLibVersion(String libVersion) {
+        this.libVersion = libVersion;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getAppIcon() {
+        return appIcon;
+    }
+
+    public void setAppIcon(String appIcon) {
+        this.appIcon = appIcon;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public boolean isEnableLog() {
+        return enableLog;
+    }
+
+    public void setEnableLog(boolean enableLog) {
+        this.enableLog = enableLog;
+    }
+
+    public boolean isEnableBGStart() {
+        return enableBGStart;
+    }
+
+    public void setEnableBGStart(boolean enableBGStart) {
+        this.enableBGStart = enableBGStart;
+    }
+
+    public String getDisPresetProps() {
+        return disPresetProps;
+    }
+
+    public void setDisPresetProps(String disPresetProps) {
+        this.disPresetProps = disPresetProps;
+    }
+
+    public String getCrashConfig() {
+        return crashConfig;
+    }
+
+    public void setCrashConfig(String crashConfig) {
+        this.crashConfig = crashConfig;
+    }
+
+    public String getMainProcessName() {
+        return mainProcessName;
+    }
+
+    public void setMainProcessName(String mainProcessName) {
+        this.mainProcessName = mainProcessName;
+    }
+
+    public int getRetentionDays() {
+        return retentionDays;
+    }
+
+    public void setRetentionDays(int retentionDays) {
+        this.retentionDays = retentionDays;
+    }
+
+    public int getDatabaseLimit() {
+        return databaseLimit;
+    }
+
+    public void setDatabaseLimit(int databaseLimit) {
+        this.databaseLimit = databaseLimit;
+    }
 
     public String getTimestamp() {
         return timestamp;
@@ -118,14 +299,6 @@ public class TAInstance extends LitePalSupport implements Serializable {
 
     public void setUnUsableReason(String unUsableReason) {
         this.unUsableReason = unUsableReason;
-    }
-
-    public String getEventIDStr() {
-        return eventIDStr;
-    }
-
-    public void setEventIDStr(String eventIDStr) {
-        this.eventIDStr = eventIDStr;
     }
 
     public boolean isMultiProcess() {

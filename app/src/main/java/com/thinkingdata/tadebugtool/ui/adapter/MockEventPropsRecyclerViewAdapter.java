@@ -40,6 +40,10 @@ public class MockEventPropsRecyclerViewAdapter extends RecyclerView.Adapter<Mock
     private List<String> keys = new ArrayList<>();
     private List<String> values = new ArrayList<>();
 
+    public JSONObject getProps() {
+        return props;
+    }
+
     public MockEventPropsRecyclerViewAdapter(Context context) {
         mContext = context;
     }
@@ -50,8 +54,6 @@ public class MockEventPropsRecyclerViewAdapter extends RecyclerView.Adapter<Mock
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        keys.clear();
-        values.clear();
         Iterator<String> iterator = props.keys();
         while (iterator.hasNext()) {
             String key = iterator.next();
@@ -78,6 +80,13 @@ public class MockEventPropsRecyclerViewAdapter extends RecyclerView.Adapter<Mock
     @Override
     public int getItemCount() {
         return props.length();
+    }
+
+    public void removeAll() {
+        props = new JSONObject();
+        keys.clear();
+        values.clear();
+        notifyDataSetChanged();
     }
 
     public static class EventPropsViewHolder extends RecyclerView.ViewHolder {

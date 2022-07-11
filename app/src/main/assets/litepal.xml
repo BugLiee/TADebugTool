@@ -3,8 +3,9 @@
     <dbname value="localdb" />
     <version value="1" />
     <list>
-        <mapping class="com.thinkingdata.tadebugtool.bean.TADebugBehaviour" />
+<!--        <mapping class="com.thinkingdata.tadebugtool.bean.TADebugBehaviour" />-->
         <mapping class="com.thinkingdata.tadebugtool.bean.TAEvent" />
+        <mapping class="com.thinkingdata.tadebugtool.bean.TAMockEvent" />
         <mapping class="com.thinkingdata.tadebugtool.bean.TAInstance" />
     </list>
 </litepal>

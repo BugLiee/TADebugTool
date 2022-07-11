@@ -4,10 +4,17 @@
 
 package com.thinkingdata.tadebugtool.bean;
 
+import android.icu.util.Calendar;
+import android.os.Build;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.Iterator;
 
 /**
  * < Event >.
@@ -18,6 +25,43 @@ import java.io.Serializable;
  */
 public class TAEvent extends LitePalSupport implements Serializable {
 
+    public TAEvent(JSONObject eventJson) {
+        setInstanceName(eventJson.optString("instanceName"));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            setTime(Calendar.getInstance().get(java.util.Calendar.YEAR) + " " + eventJson.optString("time"));
+        } else {
+            setTime((new Date().getYear() + 1900) + " " + eventJson.optString("time"));
+        }
+
+        setEventID(eventJson.optString("#uuid"));
+        setEventName(eventJson.optString("#event_name"));
+        setEventType(eventJson.optString("#type"));
+        setDistinctID(eventJson.optString("#distinct_id"));
+        setAccountID(eventJson.optString("#account_id"));
+        try {
+            JSONObject props = new JSONObject(eventJson.optString("properties"));
+            JSONObject presetProps = new JSONObject();
+            JSONObject userProps = new JSONObject();
+            Iterator<String> iterator = props.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                if (key.startsWith("#")) {
+                    presetProps.put(key, props.opt(key));
+                } else {
+                    userProps.put(key, props.opt(key));
+                }
+            }
+            //预置属性
+            setPresetProps(presetProps.toString());
+            //传入 或 自定义属性
+            setProps(userProps.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Column(defaultValue = "unknown")
     private String eventID;
     @Column(defaultValue = "unknown")
@@ -26,6 +70,17 @@ public class TAEvent extends LitePalSupport implements Serializable {
     private String eventName;
     @Column(defaultValue = "unknown")
     private String props;
+
+    public String getPresetProps() {
+        return presetProps;
+    }
+
+    public void setPresetProps(String presetProps) {
+        this.presetProps = presetProps;
+    }
+
+    @Column(defaultValue = "unknown")
+    private String presetProps;
     @Column(defaultValue = "unknown")
     private String distinctID;
     @Column(defaultValue = "unknown")
@@ -33,7 +88,7 @@ public class TAEvent extends LitePalSupport implements Serializable {
     @Column(defaultValue = "track")
     private String eventType;
     @Column(defaultValue = "unknown")
-    private String timeStamp;
+    private String time;
 
     public String getEventID() {
         return eventID;
@@ -91,11 +146,11 @@ public class TAEvent extends LitePalSupport implements Serializable {
         this.eventType = eventType;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public String getTime() {
+        return time;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTime(String time) {
+        this.time = time;
     }
 }

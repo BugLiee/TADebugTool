@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.thinkingdata.tadebugtool.ui.widget.ResizeableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="#8DBDB4"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#33A2B5"
+    app:cardCornerRadius="5dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -15,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
-            android:background="#6FA8C1">
+            android:background="#33A2B5">
 
             <TextView
                 android:layout_width="match_parent"
@@ -43,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:background="#6FA8C1">
+            android:background="#33A2B5">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,4 +68,4 @@
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
     </RelativeLayout>
-</com.thinkingdata.tadebugtool.ui.widget.ResizeableLayout>
+</androidx.cardview.widget.CardView>

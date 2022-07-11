@@ -2,13 +2,13 @@
     <string name="app_name">TADebugTool</string>
     <string name="title_home">主页</string>
     <string name="title_extension">扩展</string>
-    <string name="title_guidance">宝典</string>
+    <string name="title_history">历史</string>
     <string name="nav_header_desc">ThinkingAnalytics</string>
     <string name="nav_header_title">上海数数科技信息技术有限公司</string>
     <string name="nav_header_subtitle">SDK采集组</string>
     <string name="text_positive">确认</string>
     <string name="text_negative">取消</string>
-    <string name="text_guidance_menu">宝典目录</string>
+    <string name="text_history_menu">历史记录</string>
     <string name="info_spinner_item_status_string">正常</string>
     <string name="input_appid_hint">请输入您想要调试的AppID</string>
     <string name="add">添加</string>

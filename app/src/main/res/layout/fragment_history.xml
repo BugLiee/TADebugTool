@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/history_root_LL"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <include
+        android:id="@+id/history_menu"
+        layout="@layout/history_menu"
+        android:layout_width="100dp"
+        android:layout_height="match_parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/history_menu_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="20dp"
+        android:foreground="@mipmap/ic_triangle_right"
+        app:cardBackgroundColor="#72ABD8"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="-10dp">
+
+        <FrameLayout
+            android:id="@+id/fragment_content_fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#33A2B5" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:cardBackgroundColor="#33A2B5"
+                app:cardCornerRadius="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/filter_content_root_rl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:id="@+id/instance_filter"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:background="@drawable/filter_view_water_selector"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_filter" />
+
+                    <ImageView
+                        android:id="@+id/filter_time_sort"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/instance_filter"
+                        android:background="@drawable/filter_view_water_selector"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_filter_time" />
+
+                    <ImageView
+                        android:id="@+id/filter_event_type"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/filter_prop"
+                        android:background="@drawable/filter_view_water_selector"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_filter_event_type" />
+
+                    <ImageView
+                        android:id="@+id/filter_prop"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/filter_time_sort"
+                        android:background="@drawable/filter_view_water_selector"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_filter_prop" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </FrameLayout>
+
+</LinearLayout>

@@ -70,7 +70,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:paddingStart="@dimen/nav_header_vertical_spacing"
-        android:paddingTop="14dp"
+        android:layout_marginTop="14dp"
+        android:paddingTop="6dp"
         android:text="设备号：" />
 
     <TextView
@@ -81,7 +82,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:paddingStart="@dimen/nav_header_vertical_spacing"
-        android:paddingTop="14dp" />
+        android:layout_marginTop="14dp"
+        android:paddingTop="6dp" />
 
     <TextView
         android:layout_below="@+id/header_deviceid_tv"
@@ -115,6 +117,7 @@
         android:id="@+id/header_bottom_iv"
         android:background="@mipmap/ic_triangle_bottom"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
         android:layout_alignParentEnd="true"
         android:layout_width="20dp"
         android:layout_height="20dp"/>

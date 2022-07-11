@@ -10,10 +10,10 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_alignParentTop="true"
-            android:id="@+id/guidance_menu_appbar_top"
+            android:id="@+id/history_menu_appbar_top"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="#ffffff">
+            android:background="#87C2CA">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -23,15 +23,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/text_guidance_menu" />
+                    android:text="@string/text_history_menu" />
             </RelativeLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/guidance_menu_rv"
+            android:background="#33A2B5"
+            android:id="@+id/history_menu_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/guidance_menu_appbar_top"
+            android:layout_below="@+id/history_menu_appbar_top"
             android:orientation="vertical" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

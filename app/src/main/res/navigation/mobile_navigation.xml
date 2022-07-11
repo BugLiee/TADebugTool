@@ -18,8 +18,8 @@
         tools:layout="@layout/fragment_extension" />
 
     <fragment
-        android:id="@+id/nav_guidance"
-        android:name="com.thinkingdata.tadebugtool.ui.fragments.GuidanceFragment"
-        android:label="@string/title_guidance"
-        tools:layout="@layout/fragment_guidance" />
+        android:id="@+id/nav_history"
+        android:name="com.thinkingdata.tadebugtool.ui.fragments.HistoryFragment"
+        android:label="@string/title_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>

@@ -20,23 +20,21 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thinkingdata.tadebugtool.R;
-import com.thinkingdata.tadebugtool.bean.TADebugBehaviour;
-import com.thinkingdata.tadebugtool.ui.adapter.HeaderAppInfoRecyclerViewAdapter;
+import com.thinkingdata.tadebugtool.bean.TAInstance;
+import com.thinkingdata.tadebugtool.ui.adapter.EventPropsRecyclerViewAdapter;
 import com.thinkingdata.tadebugtool.utils.Base64Coder;
+import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.LitePal;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
@@ -90,7 +88,7 @@ public class PopupHeaderView extends PopupWindow {
                 ((TextView) view).setTextColor(Color.WHITE);
             }
         },300);
-        Toast.makeText(mActivity, "copy success!", Toast.LENGTH_SHORT).show();
+        SnackbarUtil.showSnackbarShort("copy success!");
     }
 
     private void init(){
@@ -123,6 +121,7 @@ public class PopupHeaderView extends PopupWindow {
                 return false;
             }
         });
+
     }
 
     public RotateAnimation getOpenOrCloseAnimation() {
@@ -198,6 +197,41 @@ public class PopupHeaderView extends PopupWindow {
         timer.schedule(new AnimationTask(),0,10);
     }
 
+
+    public void initRVData(TAInstance instance) {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        infoViewRV.setLayoutManager(layoutManager);
+
+        //从数据库取数据填充
+        TreeMap<String, String> map = new TreeMap<>();
+        appNameTV.setText(instance.getAppName());
+        appIconIV.setBackground(TAUtil.byteToDrawable(Base64Coder.decode(instance.getAppIcon())));
+        packageNameTV.setText(instance.getPackageName());
+        appIDTV.setText(instance.getInstanceID());
+        try {
+            JSONObject presets = new JSONObject(instance.getPresetProps());
+            deviceIDTV.setText(presets.optString("deviceID"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //
+        map.put("libVersion", instance.getLibVersion());
+        map.put("timestamp", instance.getTimestamp());
+        map.put("appVersionCode", instance.getAppVersionCode());
+        map.put("presetProps", instance.getPresetProps());
+        map.put("appVersionName", instance.getAppVersionName());
+        map.put("enableLog", String.valueOf(instance.isEnableLog()));
+        map.put("enableBGStart", String.valueOf(instance.isEnableBGStart()));
+        map.put("disPresetProps", instance.getDisPresetProps());
+        map.put("crashConfig", instance.getCrashConfig());
+        map.put("mainProcessName", instance.getMainProcessName());
+        map.put("retentionDays", String.valueOf(instance.getRetentionDays()));
+        map.put("databaseLimit", String.valueOf(instance.getDatabaseLimit()));
+        EventPropsRecyclerViewAdapter adapter = new EventPropsRecyclerViewAdapter(mActivity, map);
+        infoViewRV.setAdapter(adapter);
+    }
+
     private void setUp() {
         setContentView(mPopupView);
         setFocusable(true);
@@ -213,38 +247,6 @@ public class PopupHeaderView extends PopupWindow {
                 mActivity.getWindow().setAttributes(lp);
             }
         });
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
-        infoViewRV.setLayoutManager(layoutManager);
-        List<TADebugBehaviour> list = LitePal.findAll(TADebugBehaviour.class);
-        //从数据库取当前的作为数据填充或者从内存读取当前
-        TreeMap<String, String> map = new TreeMap<>();
-        TADebugBehaviour behaviour = list.get(0);
-        appNameTV.setText(behaviour.getAppName());
-        appIconIV.setBackground(TAUtil.byteToDrawable(Base64Coder.decode(behaviour.getAppIcon())));
-        packageNameTV.setText(behaviour.getPackageName());
-        appIDTV.setText(behaviour.getInstanceIDStr());
-        try {
-            JSONObject presets = new JSONObject(behaviour.getPresetProps());
-            deviceIDTV.setText(presets.optString("deviceID"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        //
-        map.put("libVersion", behaviour.getLibVersion());
-        map.put("timestamp", behaviour.getTimestamp());
-        map.put("appVersionCode", behaviour.getAppVersionCode());
-        map.put("presetProps", behaviour.getPresetProps());
-        map.put("appVersionName", behaviour.getAppVersionName());
-        map.put("enableLog", String.valueOf(behaviour.isEnableLog()));
-        map.put("enableBGStart", String.valueOf(behaviour.isEnableBGStart()));
-        map.put("disPresetProps", behaviour.getDisPresetProps());
-        map.put("crashConfig", behaviour.getCrashConfig());
-        map.put("mainProcessName", behaviour.getMainProcessName());
-        map.put("retentionDays", String.valueOf(behaviour.getRetentionDays()));
-        map.put("databaseLimit", String.valueOf(behaviour.getDatabaseLimit()));
-        HeaderAppInfoRecyclerViewAdapter adapter = new HeaderAppInfoRecyclerViewAdapter(mActivity, map);
-        infoViewRV.setAdapter(adapter);
     }
 
 }

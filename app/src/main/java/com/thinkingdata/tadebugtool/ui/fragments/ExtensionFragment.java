@@ -19,7 +19,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.ui.adapter.ExtensionTagFragmentPagerAdapter;
-import com.thinkingdata.tadebugtool.ui.adapter.HomeTagFragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

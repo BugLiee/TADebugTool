@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.thinkingdata.tadebugtool.bean.TAEvent;
 
+import org.json.JSONObject;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +58,7 @@ public class EventUtil {
 
 
     public static synchronized TAEvent castStr2Event(String str) {
-        TAEvent event = new TAEvent();
+        TAEvent event = new TAEvent(new JSONObject());
         String c = "07-02 06:32:54.940 24064 24064 I ThinkingAnalyticsSDK: No mAutoTrackEventListener\n" +
                 "    07-02 06:32:54.940 24064 24064 I ThinkingAnalyticsSDK: No mAutoTrackEventTrackerListener\n" +
                 "    07-02 06:32:55.102 24064 24112 I ThinkingAnalytics.DataHandle: Data enqueued(3356):\n" +

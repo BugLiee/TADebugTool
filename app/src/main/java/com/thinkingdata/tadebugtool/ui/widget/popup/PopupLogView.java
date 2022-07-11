@@ -4,27 +4,23 @@
 
 package com.thinkingdata.tadebugtool.ui.widget.popup;
 
+import static com.thinkingdata.tadebugtool.common.TAConstants.KEY_TA_TOOL_ACTION;
 import static com.thinkingdata.tadebugtool.common.TAConstants.VIEW_RADIUS;
 import static com.thinkingdata.tadebugtool.utils.TAUtil.VERSION;
-import static com.thinkingdata.tadebugtool.common.TAConstants.KEY_TA_TOOL_ACTION;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,13 +30,11 @@ import androidx.cardview.widget.CardView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.thinkingdata.tadebugtool.R;
-import com.thinkingdata.tadebugtool.utils.GetWinPoint;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 

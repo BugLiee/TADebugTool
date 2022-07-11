@@ -5,25 +5,21 @@
 package com.thinkingdata.tadebugtool.ui.widget.popup;
 
 import android.app.Activity;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.cardview.widget.CardView;
+
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.ui.widget.InputAppIDItemView;
 import com.thinkingdata.tadebugtool.ui.widget.ResizeableLayout;
-import com.thinkingdata.tadebugtool.utils.GetWinPoint;
+import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
 import java.util.ArrayList;
@@ -38,7 +34,7 @@ import java.util.List;
  */
 public class PopupInputView extends PopupWindow {
 
-    private ResizeableLayout mPopupView;
+    private CardView mPopupView;
     private int screenWidth = 0;
     private int screenHeight = 0;
     private Activity mActivity;
@@ -67,7 +63,7 @@ public class PopupInputView extends PopupWindow {
     }
 
     private void init() {
-        mPopupView = (ResizeableLayout) LayoutInflater.from(mActivity).inflate(R.layout.popup_input_appid, null);
+        mPopupView = (CardView) LayoutInflater.from(mActivity).inflate(R.layout.popup_input_appid, null);
         contentLL = mPopupView.findViewById(R.id.input_appid_content_ll);
         appIDItems.add((InputAppIDItemView) contentLL.getChildAt(0));
         addTV = mPopupView.findViewById(R.id.popup_input_appid_bottom_add);
@@ -110,7 +106,7 @@ public class PopupInputView extends PopupWindow {
                 }
                 if (appIDs.size() == 0) {
                     // show toast
-                    Toast.makeText(mActivity, "请先输入有效的AppID后再次确认！", Toast.LENGTH_SHORT).show();
+                    SnackbarUtil.showSnackbarShort("请先输入有效的AppID后再次确认！");
                 } else {
                     //callback
                     if (onSubmitClickListener != null) {
@@ -122,7 +118,7 @@ public class PopupInputView extends PopupWindow {
     }
 
     public void addItem() {
-        if (appIDItems.size() < 3) {
+        if (appIDItems.size() < 1) {
             InputAppIDItemView inputAppIDItemView = new InputAppIDItemView(mActivity);
             inputAppIDItemView.setCId(appIDItems.size());
             inputAppIDItemView.setup(new InputAppIDItemView.OnRemoveClickListener() {
@@ -139,6 +135,8 @@ public class PopupInputView extends PopupWindow {
             contentLL.addView(inputAppIDItemView);
             appIDItems.add(inputAppIDItemView);
             update(getWidth(), getHeight() + contentLL.getChildAt(0).getHeight());
+        } else {
+            SnackbarUtil.showSnackbarMid("当前版本仅支持单实例模式 ... 如有需求请联系开发人员");
         }
     }
 
@@ -147,7 +145,7 @@ public class PopupInputView extends PopupWindow {
         WindowManager.LayoutParams lp = mActivity.getWindow().getAttributes();
         lp.alpha = 0.8f;
         mActivity.getWindow().setAttributes(lp);
-        showAtLocation(mActivity.findViewById(R.id.root_CL), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, screenHeight / 10);
+        showAtLocation(mActivity.findViewById(R.id.root_msg_rl), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, screenHeight / 10);
     }
 
 }

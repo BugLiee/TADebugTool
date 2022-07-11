@@ -12,14 +12,16 @@
         android:singleLine="true"
         android:textCursorDrawable="@null"
         android:layout_weight="10"
-        android:layout_height="30dp"/>
+        android:layout_height="36dp"/>
     <TextView
         app:layout_constraintLeft_toRightOf="@+id/input_appid_et"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
         android:text="-"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:id="@+id/input_remove_tv"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="30dp"/>
+        android:layout_height="36dp"/>
 </LinearLayout>

@@ -19,7 +19,9 @@ import java.io.Serializable;
 public class TAMockEvent extends LitePalSupport implements Serializable {
 
     @Column(defaultValue = "unknown")
-    private String appID;
+    private String instanceName;
+    @Column(defaultValue = "unknown")
+    private String serverUrl;
     @Column(defaultValue = "unknown")
     private String eventName;
     @Column(defaultValue = "unknown")
@@ -33,12 +35,20 @@ public class TAMockEvent extends LitePalSupport implements Serializable {
     @Column(defaultValue = "unknown")
     private String timeStamp;
 
-    public String getAppID() {
-        return appID;
+    public String getServerUrl() {
+        return serverUrl;
     }
 
-    public void setAppID(String appID) {
-        this.appID = appID;
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    public String getInstanceName() {
+        return instanceName;
+    }
+
+    public void setInstanceName(String instanceName) {
+        this.instanceName = instanceName;
     }
 
     public String getEventName() {
