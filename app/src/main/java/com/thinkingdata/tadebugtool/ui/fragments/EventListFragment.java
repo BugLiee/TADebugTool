@@ -99,7 +99,6 @@ public class EventListFragment extends Fragment {
             } else {
                 if (isReverse) {
                     isReverse = false;
-                    Collections.reverse(showEvents);
                 }
             }
         }
