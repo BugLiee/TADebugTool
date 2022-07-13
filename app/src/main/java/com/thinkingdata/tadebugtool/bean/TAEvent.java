@@ -40,6 +40,7 @@ public class TAEvent extends LitePalSupport implements Serializable {
         setDistinctID(eventJson.optString("#distinct_id"));
         setAccountID(eventJson.optString("#account_id"));
         setBFEventID(eventJson.optString("#event_id"));
+        setFirstCheckID(eventJson.optString("#first_check_id"));
         try {
             JSONObject props = new JSONObject(eventJson.optString("properties"));
             JSONObject presetProps = new JSONObject();
@@ -74,6 +75,16 @@ public class TAEvent extends LitePalSupport implements Serializable {
     @Column(defaultValue = "unknown")
     private String BFEventID;
 
+    public String getFirstCheckID() {
+        return firstCheckID;
+    }
+
+    public void setFirstCheckID(String firstCheckID) {
+        this.firstCheckID = firstCheckID;
+    }
+
+    @Column(defaultValue = "unknown")
+    private String firstCheckID;
 
     @Column(defaultValue = "unknown")
     private String eventID;

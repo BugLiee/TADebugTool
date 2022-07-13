@@ -26,14 +26,6 @@ public class TAMockEvent extends LitePalSupport implements Serializable {
     private String eventName;
     @Column(defaultValue = "unknown")
     private String props;
-    public String getPresetProps() {
-        return presetProps;
-    }
-
-    public void setPresetProps(String presetProps) {
-        this.presetProps = presetProps;
-    }
-
     @Column(defaultValue = "unknown")
     private String presetProps;
     @Column(defaultValue = "unknown")
@@ -43,7 +35,19 @@ public class TAMockEvent extends LitePalSupport implements Serializable {
     @Column(defaultValue = "track")
     private String eventType;
     @Column(defaultValue = "unknown")
-    private String timeStamp;
+    private String time;
+    @Column(defaultValue = "unknown")
+    private String BFEventID;
+    @Column(defaultValue = "unknown")
+    private String firstCheckID;
+
+    public String getPresetProps() {
+        return presetProps;
+    }
+
+    public void setPresetProps(String presetProps) {
+        this.presetProps = presetProps;
+    }
 
     public String getBFEventID() {
         return BFEventID;
@@ -53,8 +57,13 @@ public class TAMockEvent extends LitePalSupport implements Serializable {
         this.BFEventID = BFEventID;
     }
 
-    @Column(defaultValue = "unknown")
-    private String BFEventID;
+    public String getFirstCheckID() {
+        return firstCheckID;
+    }
+
+    public void setFirstCheckID(String firstCheckID) {
+        this.firstCheckID = firstCheckID;
+    }
 
     public String getServerUrl() {
         return serverUrl;
@@ -112,11 +121,11 @@ public class TAMockEvent extends LitePalSupport implements Serializable {
         this.eventType = eventType;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public String getTime() {
+        return time;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTime(String time) {
+        this.time = time;
     }
 }

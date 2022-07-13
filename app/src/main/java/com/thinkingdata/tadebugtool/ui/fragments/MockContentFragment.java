@@ -5,7 +5,6 @@
 package com.thinkingdata.tadebugtool.ui.fragments;
 
 import android.graphics.Color;
-import android.icu.text.StringSearch;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.bean.TAMockEvent;
+import com.thinkingdata.tadebugtool.common.TAConstants;
 import com.thinkingdata.tadebugtool.ui.adapter.MockEventPropsRecyclerViewAdapter;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupPropertiesConstructorView;
 import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
@@ -35,7 +35,11 @@ import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import cn.thinkingdata.android.TDConfig;
+import cn.thinkingdata.android.TDFirstEvent;
 import cn.thinkingdata.android.TDOverWritableEvent;
 import cn.thinkingdata.android.TDPresetProperties;
 import cn.thinkingdata.android.TDUpdatableEvent;
@@ -203,7 +207,7 @@ public class MockContentFragment extends Fragment {
 
     private int currentPos = 0;
 
-    private String[] eventTypeList = new String[]{"track", "track_update", "track_overwrite", "user_set", "user_setOnce", "user_unset", "user_add", "user_append", "user_uniq_append", "user_del"};
+    private String[] eventTypeList = new String[]{"track", "track_update", "track_overwrite", "user_set", "user_setOnce", "user_unset", "user_add", "user_append", "user_uniq_append", "user_del", "first_event"};
 
     private void setUp() {
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.item_simple_spinner_simple, R.id.simple_spinner_item_tv, eventTypeList) {
@@ -281,7 +285,7 @@ public class MockContentFragment extends Fragment {
                 mockEvent = handleMockProfileSetEvent(instance, props, accountID, appID, serverUrl);
                 break;
             default:
-                mockEvent = handleMockTrack(instance, eventName, props, accountID, appID, serverUrl);
+                mockEvent = handleMockTrackOrFirstEvent(instance, eventName, props, accountID, appID, serverUrl);
                 break;
         }
 
@@ -305,7 +309,7 @@ public class MockContentFragment extends Fragment {
         mockEvent.setDistinctID(instance.getDistinctId());
         mockEvent.setInstanceName(appID);
         mockEvent.setServerUrl(serverUrl);
-        mockEvent.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+        mockEvent.setTime(new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA).format((System.currentTimeMillis())));
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(eventName, 0);
@@ -346,7 +350,7 @@ public class MockContentFragment extends Fragment {
         mockEvent.setDistinctID(instance.getDistinctId());
         mockEvent.setInstanceName(appID);
         mockEvent.setServerUrl(serverUrl);
-        mockEvent.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+        mockEvent.setTime(new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA).format((System.currentTimeMillis())));
         mockEvent.setProps(props.toString());
         mockEvent.save();
         return mockEvent;
@@ -375,7 +379,7 @@ public class MockContentFragment extends Fragment {
         mockEvent.setDistinctID(instance.getDistinctId());
         mockEvent.setInstanceName(appID);
         mockEvent.setServerUrl(serverUrl);
-        mockEvent.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+        mockEvent.setTime(new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA).format((System.currentTimeMillis())));
         TDPresetProperties presetProperties = instance.getPresetProperties();
         JSONObject presetObject = new JSONObject();
         try {
@@ -406,13 +410,17 @@ public class MockContentFragment extends Fragment {
         return mockEvent;
     }
 
-    private TAMockEvent handleMockTrack(ThinkingAnalyticsSDK instance, String eventName, JSONObject props, String accountID, String appID, String serverUrl) {
+    private TAMockEvent handleMockTrackOrFirstEvent(ThinkingAnalyticsSDK instance, String eventName, JSONObject props, String accountID, String appID, String serverUrl) {
         if (TextUtils.isEmpty(eventName)) {
             SnackbarUtil.showSnackBarMid("事件名称不能为空");
             return null;
         }
-        instance.track(eventName, props);
-
+        if (currentPos == 10) {
+            //first check
+            instance.track(new TDFirstEvent(eventName, props));
+        } else {
+            instance.track(eventName, props);
+        }
         //持久化
         TAMockEvent mockEvent = new TAMockEvent();
         mockEvent.setEventName(eventName);
@@ -422,8 +430,16 @@ public class MockContentFragment extends Fragment {
         }
         mockEvent.setDistinctID(instance.getDistinctId());
         mockEvent.setInstanceName(appID);
+        if (currentPos == 10) {
+            String firstID = props.optString("#first_check_id");
+            if (TextUtils.isEmpty(firstID)) {
+                mockEvent.setFirstCheckID(instance.getDeviceId());
+            } else {
+                mockEvent.setFirstCheckID(firstID);
+            }
+        }
         mockEvent.setServerUrl(serverUrl);
-        mockEvent.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+        mockEvent.setTime(new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA).format((System.currentTimeMillis())));
         TDPresetProperties presetProperties = instance.getPresetProperties();
         JSONObject presetObject = new JSONObject();
         try {

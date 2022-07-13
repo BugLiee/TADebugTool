@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class TAInstance extends LitePalSupport implements Serializable {
 
     public TAInstance(JSONObject instanceJSon) {
-        setTimestamp(instanceJSon.optString("timestamp"));
+        setTime(instanceJSon.optString("time"));
         setInstanceID(instanceJSon.optString("instanceID"));
         setDistinctID(instanceJSon.optString("distinctID"));
         setAccountID(instanceJSon.optString("accountID"));
@@ -55,9 +55,22 @@ public class TAInstance extends LitePalSupport implements Serializable {
         setMainProcessName(instanceJSon.optString("mainProcessName"));
         setRetentionDays(instanceJSon.optInt("retentionDays"));
         setDatabaseLimit(instanceJSon.optInt("databaseLimit"));
+        setTimeZone(instanceJSon.optString("timeZone"));
     }
+
+    @Column(defaultValue = "GMT+08:00")
+    private String timeZone;
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
     @Column(defaultValue = "unknown")
-    private String timestamp;
+    private String time;
     @Column(defaultValue = "unknown")
     private String instanceID;
     @Column(defaultValue = "unknown")
@@ -237,12 +250,12 @@ public class TAInstance extends LitePalSupport implements Serializable {
         this.databaseLimit = databaseLimit;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public String getTime() {
+        return time;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getInstanceID() {

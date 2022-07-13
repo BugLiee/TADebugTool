@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     instances = LitePal.findAll(TAInstance.class);
                     if (instances.size() > 0) {
                         TAInstance instance = instances.get(instances.size()-1);
-                        String instanceName = instance.getName() + instance.getTimestamp();
+                        String instanceName = instance.getName() + instance.getTime();
                         currentEvents = LitePal.where("instanceName = ?", instanceName).find(TAEvent.class);
                         runOnUiThread(new Runnable() {
                             @Override

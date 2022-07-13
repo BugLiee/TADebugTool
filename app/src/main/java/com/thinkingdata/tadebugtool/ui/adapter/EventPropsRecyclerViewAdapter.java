@@ -9,6 +9,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,7 @@ public class EventPropsRecyclerViewAdapter extends RecyclerView.Adapter<EventPro
     private Activity mActivity;
     private View mView;
 
-    public EventPropsRecyclerViewAdapter(Activity activity, TreeMap<String, String> list ) {
+    public EventPropsRecyclerViewAdapter(Activity activity, TreeMap<String, String> list) {
         mActivity = activity;
         itemList.putAll(list);
         for (Map.Entry<String, String> entry : itemList.entrySet()) {

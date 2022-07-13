@@ -34,6 +34,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.thinkingdata.tadebugtool.common.TAConstants;
+import com.thinkingdata.tadebugtool.ui.widget.FloatLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
@@ -451,5 +453,55 @@ public class TAUtil {
         }
         return result;
 
+    }
+
+    public static void checkAppIDAndUrl(String destUrl, String appID, FloatLayout.RequestListener requestListener) {
+        String cUrl = (destUrl.contains("/sync") ? destUrl.substring(0, destUrl.lastIndexOf("/sync")) : destUrl) + "/check_appid" + "?appid=" + appID;
+
+        new Thread(() -> {
+            BufferedReader in = null;
+            StringBuilder result = new StringBuilder();
+            HttpURLConnection conn = null;
+            try {
+                URL url = new URL(cUrl);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                //设置连接超时时间和读取超时时间
+                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(10000);
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Content-Type", "charset=utf-8");
+                //取得输入流，并使用Reader读取
+                if (200 == conn.getResponseCode()) {
+                    in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        result.append(line);
+                    }
+                    if (requestListener != null) {
+                        requestListener.requestEnd(conn.getResponseCode(), result.toString());
+                    }
+                } else {
+                    if (requestListener != null) {
+                        requestListener.requestEnd(conn.getResponseCode(), "request error");
+                    }
+                }
+            } catch (Exception e) {
+                if (requestListener != null) {
+                    requestListener.requestEnd(-1, "request error");
+                }
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                    if (conn != null) {
+                        conn.disconnect();
+                    }
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

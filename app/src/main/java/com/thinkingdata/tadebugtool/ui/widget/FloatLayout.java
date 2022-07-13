@@ -41,6 +41,7 @@ import androidx.cardview.widget.CardView;
 import com.thinkingdata.tadebugtool.MainActivity;
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.bean.TAInstance;
+import com.thinkingdata.tadebugtool.common.TAConstants;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupInfoView;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupLogView;
 import com.thinkingdata.tadebugtool.utils.Base64Coder;
@@ -49,8 +50,10 @@ import com.thinkingdata.tadebugtool.utils.TAUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -740,6 +743,10 @@ public class FloatLayout extends FrameLayout {
         }
     };
 
+    public interface RequestListener{
+        void requestEnd(int code, String msg);
+    }
+
     public static String mAppID = "";
     public static String mAppName = "";
 
@@ -750,24 +757,41 @@ public class FloatLayout extends FrameLayout {
                 String retStr = mTAToolServer.getAppAndSDKInfoWithAppID(appID);
                 try {
                     JSONObject instanceJSon = new JSONObject(retStr);
-                    String timestamp = String.valueOf(System.currentTimeMillis());
-                    mAppName = instanceJSon.optString("name") + timestamp;
-                    TAUtil.mergeJSONObject(publicConfig, instanceJSon, TimeZone.getTimeZone("GMT:+8:00"));
-                    instanceJSon.put("timestamp", timestamp);
+                    //
+                    String time = new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA).format(System.currentTimeMillis());
+                    mAppName = instanceJSon.optString("name") + time;
+                    String timeZoneStr = instanceJSon.optString("timeZone");
+                    TAUtil.mergeJSONObject(publicConfig, instanceJSon, TimeZone.getTimeZone(timeZoneStr));
+
+                    instanceJSon.put("time", time);
                     instanceJSon.put("instanceID", mAppID);
-                    //检查匹配和跨域问题
-                    String url = instanceJSon.optString("url");
-
-//                    TAUtil.checkAppIDAndUrl(mAppID, url.contains("/sync") ? url.substring(0, url.lastIndexOf("/sync")) : url);
-                    instanceJSon.put("usable", true);
-                    instanceJSon.put("unUsableReason", "我跨域了");
-
                     instanceJSon.put("packageName", packageName);
                     instanceJSon.put("appName", appName);
                     instanceJSon.put("appIcon", new String(Base64Coder.encode(TAUtil.drawableToByte(appIcon))));
 
-                    TAInstance instance = new TAInstance(instanceJSon);
-                    instance.save();
+                    RequestListener requestListener = new RequestListener() {
+                        @Override
+                        public void requestEnd(int code, String msg) {
+                            try {
+                                JSONObject msgJSON = new JSONObject(msg);
+                                if (code == 200 && msgJSON.optInt("code") == 0) {
+                                    instanceJSon.put("usable", true);
+                                }
+                            } catch (JSONException e) {
+                                try {
+                                    instanceJSon.put("usable", false);
+                                    instanceJSon.put("unUsableReason", "appid & server 不匹配");
+                                } catch (JSONException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }finally {
+                                TAInstance instance = new TAInstance(instanceJSon);
+                                instance.save();
+                            }
+                        }
+                    };
+                    //检查匹配和跨域问题
+                    TAUtil.checkAppIDAndUrl(instanceJSon.optString("url"), mAppID, requestListener);
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
@@ -783,9 +807,7 @@ public class FloatLayout extends FrameLayout {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
     public void unbindThis(String msg) {

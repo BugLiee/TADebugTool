@@ -88,27 +88,32 @@ public class EventListRecyclerViewAdapter extends RecyclerView.Adapter<EventList
         TreeMap<String, String> props = new TreeMap<>();
         //update or overwrite
         String eventID = event.getBFEventID();
-        if (!TextUtils.isEmpty(eventID)) {
+        if (!TextUtils.isEmpty(eventID) && !eventID.equals("unknown")) {
             props.put("eventID", eventID);
         }
-        if (!TextUtils.isEmpty(eventName)) {
+        if (!TextUtils.isEmpty(eventName) && !eventName.equals("unknown")) {
             props.put("eventName", eventName);
         }
         String accountID = event.getAccountID();
-        if (!TextUtils.isEmpty(accountID)) {
+        if (!TextUtils.isEmpty(accountID) && !accountID.equals("unknown")) {
             props.put("accountID", accountID);
         }
         String distinctID = event.getDistinctID();
-        if (!TextUtils.isEmpty(distinctID)) {
+        if (!TextUtils.isEmpty(distinctID) && !distinctID.equals("unknown")) {
             props.put("distinctID", distinctID);
         }
         String mProps = event.getProps();
-        if (!TextUtils.isEmpty(mProps)) {
+        if (!TextUtils.isEmpty(mProps) && !mProps.equals("unknown") && !mProps.equals("{}")) {
             props.put("props", mProps);
         }
         String presetProps = event.getPresetProps();
-        if (!TextUtils.isEmpty(presetProps)) {
+        if (!TextUtils.isEmpty(presetProps) && !presetProps.equals("unknown") && !presetProps.equals("{}")) {
             props.put("presetProps", presetProps);
+        }
+
+        String firstCheckID = event.getFirstCheckID();
+        if (!TextUtils.isEmpty(firstCheckID) && !firstCheckID.equals("unknown")) {
+            props.put("firstCheckID", firstCheckID);
         }
         props.put("eventType", eventType);
         props.put("time", time);

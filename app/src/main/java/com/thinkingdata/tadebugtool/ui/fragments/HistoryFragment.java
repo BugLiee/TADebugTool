@@ -102,7 +102,7 @@ public class HistoryFragment extends Fragment {
         List<List<TAEvent>> events = new ArrayList<>();
         for (int i = 0; i < instances.size(); i++) {
             names.add(instances.get(i).getName());
-            List<TAEvent> eventList = LitePal.where("instanceName = ?", instances.get(i).getName() + instances.get(i).getTimestamp()).find(TAEvent.class);
+            List<TAEvent> eventList = LitePal.where("instanceName = ?", instances.get(i).getName() + instances.get(i).getTime()).find(TAEvent.class);
             events.add(eventList);
         }
         adapter.notifyDataChanged(names);

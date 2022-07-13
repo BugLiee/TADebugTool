@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -198,7 +199,6 @@ public class PopupHeaderView extends PopupWindow {
 
 
     public void initRVData(TAInstance instance) {
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         infoViewRV.setLayoutManager(layoutManager);
 
@@ -216,7 +216,7 @@ public class PopupHeaderView extends PopupWindow {
         }
         //
         map.put("libVersion", instance.getLibVersion());
-        map.put("timestamp", instance.getTimestamp());
+        map.put("time", instance.getTime());
         map.put("appVersionCode", instance.getAppVersionCode());
         map.put("presetProps", instance.getPresetProps());
         map.put("appVersionName", instance.getAppVersionName());
@@ -229,6 +229,14 @@ public class PopupHeaderView extends PopupWindow {
         map.put("databaseLimit", String.valueOf(instance.getDatabaseLimit()));
         map.put("flushInterval", String.valueOf(instance.getFlushInterval()));
         map.put("flushBulkSize", String.valueOf(instance.getFlushBulkSize()));
+        map.put("sdkMode", String.valueOf(instance.getSdkMode()));
+        map.put("isCalibrateTime", String.valueOf(instance.isSetCalibrateTime()));
+        map.put("timeZone", String.valueOf(instance.getTimeZone()));
+        map.put("usable", String.valueOf(instance.isUsable()));
+        String unUsableReason = instance.getUnUsableReason();
+        if (!unUsableReason.equals("unknown") && !TextUtils.isEmpty(unUsableReason)) {
+            map.put("unUsableReason", unUsableReason);
+        }
         EventPropsRecyclerViewAdapter adapter = new EventPropsRecyclerViewAdapter(mActivity, map);
         infoViewRV.setAdapter(adapter);
     }

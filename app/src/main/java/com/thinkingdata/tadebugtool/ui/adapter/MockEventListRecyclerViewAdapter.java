@@ -5,8 +5,8 @@
 package com.thinkingdata.tadebugtool.ui.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thinkingdata.tadebugtool.R;
-import com.thinkingdata.tadebugtool.bean.TAEvent;
 import com.thinkingdata.tadebugtool.bean.TAMockEvent;
 import com.thinkingdata.tadebugtool.common.TAConstants;
 
@@ -61,7 +60,7 @@ public class MockEventListRecyclerViewAdapter extends RecyclerView.Adapter<MockE
         holder.setIsRecyclable(false);
         String eventName = mList.get(position).getEventName();
         String eventType = mList.get(position).getEventType();
-        String time = new SimpleDateFormat(TAConstants.TIME_PATTERN, Locale.CHINA).format(new Date(Long.parseLong(mList.get(position).getTimeStamp())));
+        String time = mList.get(position).getTime();
         holder.titleTV.setText(eventName.equals("unknown") ? eventType : eventName);
         holder.timeTV.setText(time);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,27 +79,32 @@ public class MockEventListRecyclerViewAdapter extends RecyclerView.Adapter<MockE
         if (!TextUtils.isEmpty(eventID) && !eventID.equals("unknown")) {
             props.put("eventID", eventID);
         }
-        if (!eventName.equals("unknown")) {
+        if (!TextUtils.isEmpty(eventName) && !eventName.equals("unknown")) {
             props.put("eventName", eventName);
         }
         String accountID = event.getAccountID();
-        if (!accountID.equals("unknown")) {
+        if (!TextUtils.isEmpty(accountID) && !accountID.equals("unknown")) {
             props.put("accountID", accountID);
         }
         String distinctID = event.getDistinctID();
-        if (!distinctID.equals("unknown")) {
+        if (!TextUtils.isEmpty(distinctID) && !distinctID.equals("unknown")) {
             props.put("distinctID", distinctID);
         }
         String mProps = event.getProps();
-        if (!mProps.equals("unknown") && !mProps.equals("{}")) {
+        if (!TextUtils.isEmpty(mProps) && !mProps.equals("unknown") && !mProps.equals("{}")) {
             props.put("props", mProps);
         }
         String presetProps = event.getPresetProps();
-        if (!presetProps.equals("unknown")) {
+        if (!TextUtils.isEmpty(presetProps) && !presetProps.equals("unknown") && !presetProps.equals("{}")) {
             props.put("presetProps", presetProps);
         }
+
+        String firstCheckID = event.getFirstCheckID();
+        if (!TextUtils.isEmpty(firstCheckID) && !firstCheckID.equals("unknown")) {
+            props.put("firstCheckID", firstCheckID);
+        }
         props.put("eventType", eventType);
-        props.put("timeStamp", time);
+        props.put("time", time);
         holder.recyclerView.setAdapter(new EventPropsRecyclerViewAdapter(mActivity, props));
     }
 
