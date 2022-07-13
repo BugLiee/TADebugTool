@@ -5,25 +5,22 @@
 package com.thinkingdata.tadebugtool.ui.widget.popup;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.thinkingdata.tadebugtool.R;
+import com.thinkingdata.tadebugtool.ui.adapter.TypeMenuRecyclerViewAdapter;
+import com.thinkingdata.tadebugtool.ui.widget.CollectionTypeView;
+import com.thinkingdata.tadebugtool.ui.widget.MapTypeView;
+import com.thinkingdata.tadebugtool.ui.widget.NormalTypeView;
 import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
@@ -32,9 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * < Copy Message >.
@@ -45,32 +41,30 @@ import java.util.Map;
  */
 public class PopupPropertiesConstructorView extends PopupWindow {
     private View mPopupView;
-    private Activity mActivity;
+    private final Activity mActivity;
     private int screenWidth = 0;
     private int screenHeight = 0;
+
+
     private TextView positiveTV;
-    private TextView titleTV;
-    private EditText propKeyET;
-    private EditText propValueET;
 
     private TextView addTV;
-    private LinearLayout containerLL;
-    private LinearLayout itemLL;
 
-    private List<EditText> items = new ArrayList<>();
-    private JSONObject props = new JSONObject();
+    private JSONObject props = null;
 
-    private Spinner collectionTypeSpinner;
+    private final String[] collectionType = new String[]{"String", "Boolean", "Float", "Double", "Long", "Byte", "Char", "Short", "Integer"};
+    private int currentCollectionPos = 0;
 
-    private String collectionType[] = new String[]{"String", "Boolean", "Float", "Double", "Long", "Byte", "Char", "Short", "Integer"};
+    private final String[] typeList = new String[]{"String", "Boolean", "Float", "Double", "Long", "Byte", "Char", "Short", "Integer", "Map", "Collection"};
 
-    private String mCollectionType = "String";
-    //    private String[] typeList = new String[]{"String", "Boolean", "Float", "Double", "Long", "Byte", "Char", "Short", "Integer", "Map", "Collection"};
-    private String mType = "String";
+    private RecyclerView typeMenuRV;
 
-    private Map<String, String> map = new HashMap<>();
-    private List<EditText> mapItemKeys = new ArrayList<>();
-    private List<EditText> mapItemValues = new ArrayList<>();
+    NormalTypeView normalTypView;
+    MapTypeView mapTypeView;
+    CollectionTypeView collectionTypeView;
+
+    private FrameLayout contentFL;
+    private int lastSelectPos = 0;
 
     public interface OnPositiveListener {
         void onPositive(JSONObject props);
@@ -82,255 +76,247 @@ public class PopupPropertiesConstructorView extends PopupWindow {
         onPositiveListener = listener;
     }
 
-    public PopupPropertiesConstructorView(Activity activity, String type) {
+    public PopupPropertiesConstructorView(Activity activity) {
         mActivity = activity;
-        mType = type;
         int[] screenSize = TAUtil.getDeviceSize(mActivity);
         screenWidth = screenSize[0];
         screenHeight = screenSize[1];
         init();
     }
 
+    private void initLayouts() {
+        normalTypView = new NormalTypeView(mActivity);
+        mapTypeView = new MapTypeView(mActivity);
+        collectionTypeView = new CollectionTypeView(mActivity, collectionType);
+        collectionTypeView.setTypeSelectListener(new CollectionTypeView.OnTypeSelectListener() {
+            @Override
+            public void onSelect(int pos) {
+                currentCollectionPos = pos;
+            }
+        });
+        contentFL.addView(normalTypView);
+    }
+
     private void init() {
-        switch (mType) {
-            case "Map":
-                mPopupView = LayoutInflater.from(mActivity).inflate(R.layout.popup_props_constructor_map_view, null);
-                initMapView();
-                break;
-            case "Collection":
-                mPopupView = LayoutInflater.from(mActivity).inflate(R.layout.popup_props_constructor_collection_view, null);
-                initCollectionView();
-                break;
-            default:
-                mPopupView = LayoutInflater.from(mActivity).inflate(R.layout.popup_props_constructor_normal_view, null);
-        }
+        mPopupView = LayoutInflater.from(mActivity).inflate(R.layout.popup_props_constructor_view, null);
         setContentView(mPopupView);
         setAnimationStyle(R.style.PopupHeaderViewStyle);
         setFocusable(true);
-        titleTV = mPopupView.findViewById(R.id.popup_prop_constructor_title_tv);
-        titleTV.setText(mType);
-        positiveTV = mPopupView.findViewById(R.id.popup_prop_constructor_positive_tv);
-        propKeyET = mPopupView.findViewById(R.id.input_prop_key_et);
-        propValueET = mPopupView.findViewById(R.id.input_prop_value_et);
-        items.add(propValueET);
+        initView();
+        initLayouts();
+    }
+
+
+    private void initView() {
+        typeMenuRV = mPopupView.findViewById(R.id.popup_props_constructor_rv);
+        TypeMenuRecyclerViewAdapter adapter = new TypeMenuRecyclerViewAdapter(mActivity, typeList);
+        LinearLayoutManager manager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        typeMenuRV.setLayoutManager(manager);
+        typeMenuRV.setAdapter(adapter);
+        contentFL = mPopupView.findViewById(R.id.popup_props_constructor_fl);
+        adapter.setItemClickListener(new TypeMenuRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int pos) {
+                if (lastSelectPos != pos) {
+                    lastSelectPos = pos;
+                    contentFL.removeAllViews();
+                    switch (lastSelectPos) {
+                        case 9:
+                            contentFL.addView(mapTypeView);
+                            break;
+                        case 10:
+                            contentFL.addView(collectionTypeView);
+                            break;
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                        default:
+                            contentFL.addView(normalTypView);
+                            break;
+                    }
+                }
+            }
+        });
+
+        addTV = mPopupView.findViewById(R.id.prop_input_item_add_tv);
+        addTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastSelectPos == typeList.length - 1) {
+                    collectionTypeView.addItem();
+
+                }else if(lastSelectPos == typeList.length - 2) {
+                    mapTypeView.addItem();
+                }else {
+                    //do nothing
+                }
+            }
+        });
+
+        positiveTV = mPopupView.findViewById(R.id.prop_input_item_add_positive_tv);
         positiveTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                props = new JSONObject();
-                String key = propKeyET.getText().toString().trim();
-                if (TextUtils.isEmpty(key)) {
-                    SnackbarUtil.showSnackbarShort("key不能为空，请检查属性配置！ ");
-                    return;
+                switch (lastSelectPos) {
+                    case 9:
+                        handleMapProp(mapTypeView.getKey(),mapTypeView.getValues());
+                        break;
+                    case 10:
+                        handleListProp(collectionTypeView.getKey(),collectionTypeView.getValues());
+                        break;
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    default:
+                        handleProp(normalTypView.getKey(), normalTypView.getValue());
+                        break;
                 }
-                if (mType.equals("Map")) {
-                    //only string
-                    for (int i = 0; i < mapItemKeys.size(); i++) {
-                        map.put(mapItemKeys.get(i).getText().toString().trim(), mapItemValues.get(i).getText().toString().trim());
-                    }
+                if (onPositiveListener != null) {
                     try {
-                        props.put(key, new JSONObject(map));
+                        onPositiveListener.onPositive(new JSONObject(props.toString()));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                } else if (mType.equals("Collection")) {
-                    try {
-                        switch (mCollectionType) {
-                            case "String":
-                                List<String> listString = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listString.add(view.getText().toString().trim());
-                                }
-                                props.put(key, new JSONArray(listString));
-                                break;
-                            case "Boolean":
-                                List<Boolean> listBoolean = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listBoolean.add(Boolean.parseBoolean(view.getText().toString().trim()));
-                                }
-                                props.put(key, new JSONArray(listBoolean));
-                                break;
-                            case "Float":
-                                List<Float> listFloat = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listFloat.add(Float.parseFloat(view.getText().toString().trim()));
-                                }
-                                props.put(key, new JSONArray(listFloat));
-                                break;
-                            case "Double":
-                                List<Double> listDouble = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listDouble.add(Double.parseDouble(view.getText().toString().trim()));
-                                }
-                                props.put(key, new JSONArray(listDouble));
-                                break;
-                            case "Long":
-                                List<Long> listLong = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listLong.add(Long.parseLong(view.getText().toString().trim()));
-                                }
-                                props.put(key, new JSONArray(listLong));
-                                break;
-                            case "Byte":
-                                List<Byte> listByte = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listByte.add(Byte.parseByte(view.getText().toString().trim()));
-                                }
-                                props.put(key, new JSONArray(listByte));
-                                break;
-                            case "Char":
-                                List<String> listChar = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listChar.add(String.valueOf(view.getText().toString().trim().charAt(0)));
-                                }
-                                props.put(key, new JSONArray(listChar));
-                                break;
-                            case "Short":
-                                List<Short> listShort = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listShort.add(Short.parseShort(view.getText().toString().trim()));
-                                }
-                                props.put(key, new JSONArray(listShort));
-                                break;
-                            case "Integer":
-                                List<Integer> listInteger = new ArrayList<>();
-                                for (EditText view : items) {
-                                    listInteger.add(Integer.parseInt(view.getText().toString().trim()));
-                                }
-                                props.put(key, new JSONArray(listInteger));
-                                break;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    handleProp(key, propValueET.getText().toString().trim());
                 }
+                props = null;
+                dismiss();
+            }
+        });
+    }
 
-                if (onPositiveListener != null) {
-                    if (props.length() == 0) {
-                        SnackbarUtil.showSnackbarShort("转换数据错误，请检查您的输入！");
-                    } else {
-                        onPositiveListener.onPositive(props);
+    private void handleListProp(String key, List<String> values) {
+        props = new JSONObject();
+        if (key == null && values == null) {
+            return;
+        }
+        try {
+            switch (currentCollectionPos) {
+                case 0:
+                    props.put(key, new JSONArray(values));
+                    break;
+                case 1:
+                    List<Boolean> booleanList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        booleanList.add(Boolean.parseBoolean(values.get(i)));
                     }
-                }
+                    props.put(key, new JSONArray(booleanList));
+                    break;
+                case 2:
+                    List<Float> floatList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        floatList.add(Float.parseFloat(values.get(i)));
+                    }
+                    props.put(key, new JSONArray(floatList));
+                    break;
+                case 3:
+                    List<Double> doubleList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        doubleList.add(Double.parseDouble(values.get(i)));
+                    }
+                    props.put(key, new JSONArray(doubleList));
+                    break;
+                case 4:
+                    List<Long> longList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        longList.add(Long.parseLong(values.get(i)));
+                    }
+                    props.put(key, new JSONArray(longList));
+                    break;
+                case 5:
+                    List<Byte> byteList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        byteList.add(Byte.parseByte(values.get(i)));
+                    }
+                    props.put(key, new JSONArray(byteList));
+                    break;
+                case 6:
+                    List<Character> charList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        charList.add(values.get(i).charAt(0));
+                    }
+                    props.put(key, new JSONArray(charList));
+                    break;
+                case 7:
+                    List<Short> shortList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        shortList.add(Short.parseShort(values.get(i)));
+                    }
+                    props.put(key, new JSONArray(shortList));
+                    break;
+                case 8:
+                    List<Integer> integerList = new ArrayList<>();
+                    for (int i = 0; i < values.size(); i++) {
+                        integerList.add(Integer.parseInt(values.get(i)));
+                    }
+                    props.put(key, new JSONArray(integerList));
+                    break;
             }
-        });
-    }
-
-    private void initMapView() {
-        addTV = mPopupView.findViewById(R.id.popup_prop_constructor_add_list_tv);
-
-        addTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItem2Map();
-            }
-        });
-        itemLL = mPopupView.findViewById(R.id.popup_prop_constructor_input_item_ll);
-        containerLL = mPopupView.findViewById(R.id.popup_prop_constructor_container_ll);
-        //items
-        mapItemKeys.add(mPopupView.findViewById(R.id.input_prop_item_key_et));
-        mapItemValues.add(mPopupView.findViewById(R.id.input_prop_item_value_et));
-
-    }
-
-    private void addItem2Map() {
-        if (mapItemKeys.size() < 10) {
-            View layout = LayoutInflater.from(mActivity).inflate(R.layout.item_prop_map_input_view, null);
-            containerLL.addView(layout);
-            mapItemKeys.add(layout.findViewById(R.id.input_prop_item_key_et));
-            mapItemValues.add(layout.findViewById(R.id.input_prop_item_value_et));
-        } else {
-            SnackbarUtil.showSnackbarShort("已达最大限制");
+        } catch (Exception e) {
+            SnackbarUtil.showSnackBarMid("转换List类型失败", mPopupView);
         }
-        if (mapItemKeys.size() <= 3) {
-            update(getWidth(), getHeight() + itemLL.getHeight());
-        }
     }
 
-    private void initCollectionView() {
-        addTV = mPopupView.findViewById(R.id.popup_prop_constructor_add_list_tv);
-        addTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItem2List();
-            }
-        });
-        itemLL = mPopupView.findViewById(R.id.popup_prop_constructor_input_item_ll);
-        containerLL = mPopupView.findViewById(R.id.popup_prop_constructor_container_ll);
-        collectionTypeSpinner = mPopupView.findViewById(R.id.popup_prop_constructor_collection_type_spinner);
-
-        ArrayAdapter adapter = new ArrayAdapter(mActivity, R.layout.item_simple_spinner_simple, R.id.simple_spinner_item_tv, collectionType) {
-            @Override
-            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                View view = LayoutInflater.from(mActivity).inflate(R.layout.item_simple_spinner_simple, parent, false);
-                TextView tv = view.findViewById(R.id.simple_spinner_item_tv);
-                tv.setText(collectionType[position]);
-                tv.setTextColor(Color.GREEN);
-                return view;
-            }
-        };
-
-        collectionTypeSpinner.setAdapter(adapter);
-        collectionTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mCollectionType = collectionType[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    public void addItem2List() {
-        if (items.size() < 10) {
-            View layout = LayoutInflater.from(mActivity).inflate(R.layout.item_prop_collection_input_view, null);
-            containerLL.addView(layout);
-            items.add(layout.findViewById(R.id.input_prop_value_et));
-        } else {
-            SnackbarUtil.showSnackbarShort("已达最大限制");
+    private void handleMapProp(String key, TreeMap<String, String> values) {
+        props = new JSONObject();
+        if (key == null && values == null) {
+            return;
         }
-        if (items.size() <= 3) {
-            update(getWidth(), getHeight() + itemLL.getHeight());
+        try {
+            props.put(key, new JSONObject(values));
+        } catch (Exception e) {
+            SnackbarUtil.showSnackBarMid("转换Map类型失败", mPopupView);
         }
     }
 
     private void handleProp(String keyStr, String valueStr) {
+        props = new JSONObject();
+        if (keyStr == null && valueStr == null) {
+            return;
+        }
         try {
-            switch (mType) {
-                case "String":
+            switch (lastSelectPos) {
+                case 0:
                     props.put(keyStr, valueStr);
                     break;
-                case "Boolean":
+                case 1:
                     props.put(keyStr, Boolean.parseBoolean(valueStr));
                     break;
-                case "Float":
+                case 2:
                     props.put(keyStr, Float.parseFloat(valueStr));
                     break;
-                case "Double":
+                case 3:
                     props.put(keyStr, Double.parseDouble(valueStr));
                     break;
-                case "Long":
+                case 4:
                     props.put(keyStr, Long.parseLong(valueStr));
                     break;
-                case "Byte":
+                case 5:
                     props.put(keyStr, Byte.parseByte(valueStr));
                     break;
-                case "Char":
-                    props.put(keyStr, String.valueOf(valueStr.charAt(0)));
+                case 6:
+                    props.put(keyStr, Character.valueOf(valueStr.charAt(0)));
                     break;
-                case "Short":
+                case 7:
                     props.put(keyStr, Short.valueOf(valueStr));
                     break;
-                case "Integer":
+                case 8:
                     props.put(keyStr, Integer.parseInt(valueStr));
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            SnackbarUtil.showSnackBarMid("转换类型失败", mPopupView);
         }
     }
 
@@ -338,8 +324,18 @@ public class PopupPropertiesConstructorView extends PopupWindow {
         if (parentView != null) {
             setHeight(screenHeight / 3);
             setWidth(screenWidth - 200);
+            WindowManager.LayoutParams lp = mActivity.getWindow().getAttributes();
+            lp.alpha = 0.8f;
+            mActivity.getWindow().setAttributes(lp);
             showAtLocation(parentView, Gravity.CENTER, 0, 0);
         }
     }
 
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        WindowManager.LayoutParams lp = mActivity.getWindow().getAttributes();
+        lp.alpha = 1f;
+        mActivity.getWindow().setAttributes(lp);
+    }
 }

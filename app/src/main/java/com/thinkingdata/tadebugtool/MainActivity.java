@@ -23,7 +23,6 @@ import com.thinkingdata.tadebugtool.bean.TAEvent;
 import com.thinkingdata.tadebugtool.bean.TAInstance;
 import com.thinkingdata.tadebugtool.ui.adapter.AppInfoRecyclerViewAdapter;
 import com.thinkingdata.tadebugtool.ui.adapter.EventListRecyclerViewAdapter;
-import com.thinkingdata.tadebugtool.ui.fragments.HistoryFragment;
 import com.thinkingdata.tadebugtool.ui.fragments.HomeFragment;
 import com.thinkingdata.tadebugtool.ui.widget.DragFloatActionButton;
 import com.thinkingdata.tadebugtool.ui.widget.FloatLayout;
@@ -228,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             popupHeaderView.initRVData(instances.get(instances.size()-1));
             popupHeaderView.showAtLocation(mActivity.findViewById(R.id.root_msg_rl), Gravity.TOP | Gravity.START, 0, 0);
         } else {
-            SnackbarUtil.showSnackbarMid("暂时还没有进行过应用调试哦-.-");
+            SnackbarUtil.showSnackBarMid("暂时还没有进行过应用调试哦-.-");
         }
     }
 

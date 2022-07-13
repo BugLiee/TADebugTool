@@ -9,7 +9,6 @@ import static com.thinkingdata.tadebugtool.common.TAConstants.FILTER_TYPE_EVENT_
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +27,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.bean.TAEvent;
 import com.thinkingdata.tadebugtool.bean.TAInstance;
 import com.thinkingdata.tadebugtool.common.TAConstants;
 import com.thinkingdata.tadebugtool.ui.adapter.HistoryRecyclerViewAdapter;
-import com.thinkingdata.tadebugtool.ui.adapter.TagFragmentPagerAdapter;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupFilterView;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
@@ -118,7 +114,9 @@ public class HistoryFragment extends Fragment {
         fragment = new EventListFragment();
         ft.replace(R.id.fragment_content_fl, fragment);
         ft.commitNow();
-        fragment.notifyDataChange(events.get(0));
+        if (events.size() > 0) {
+            fragment.notifyDataChange(events.get(0));
+        }
         //
         adapter.setItemClickListener(new HistoryRecyclerViewAdapter.OnItemClickListener() {
             @Override

@@ -30,7 +30,6 @@ import org.json.JSONObject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -219,7 +218,7 @@ public class EventPropsRecyclerViewAdapter extends RecyclerView.Adapter<EventPro
                 ((TextView) view).setTextColor(Color.WHITE);
             }
         }, 300);
-        SnackbarUtil.showSnackbarMid("copy success!");
+        SnackbarUtil.showSnackBarMid("copy success!");
     }
 
     @Override

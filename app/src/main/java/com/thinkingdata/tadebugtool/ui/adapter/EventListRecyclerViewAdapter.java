@@ -86,14 +86,33 @@ public class EventListRecyclerViewAdapter extends RecyclerView.Adapter<EventList
         });
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
         TreeMap<String, String> props = new TreeMap<>();
-        props.put("eventName", eventName);
+        //update or overwrite
+        String eventID = event.getBFEventID();
+        if (!TextUtils.isEmpty(eventID)) {
+            props.put("eventID", eventID);
+        }
+        if (!TextUtils.isEmpty(eventName)) {
+            props.put("eventName", eventName);
+        }
+        String accountID = event.getAccountID();
+        if (!TextUtils.isEmpty(accountID)) {
+            props.put("accountID", accountID);
+        }
+        String distinctID = event.getDistinctID();
+        if (!TextUtils.isEmpty(distinctID)) {
+            props.put("distinctID", distinctID);
+        }
+        String mProps = event.getProps();
+        if (!TextUtils.isEmpty(mProps)) {
+            props.put("props", mProps);
+        }
+        String presetProps = event.getPresetProps();
+        if (!TextUtils.isEmpty(presetProps)) {
+            props.put("presetProps", presetProps);
+        }
         props.put("eventType", eventType);
         props.put("time", time);
-        props.put("eventID", event.getEventID());
-        props.put("accountID", event.getAccountID());
-        props.put("distinctID", event.getDistinctID());
-        props.put("props", event.getProps());
-        props.put("presetProps", event.getPresetProps());
+        props.put("UUID", event.getEventID());
         EventPropsRecyclerViewAdapter adapter = new EventPropsRecyclerViewAdapter(mActivity, props);
         holder.recyclerView.setAdapter(adapter);
 

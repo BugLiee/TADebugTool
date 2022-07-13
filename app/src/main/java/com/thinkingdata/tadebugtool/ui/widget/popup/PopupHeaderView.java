@@ -11,7 +11,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -88,7 +87,7 @@ public class PopupHeaderView extends PopupWindow {
                 ((TextView) view).setTextColor(Color.WHITE);
             }
         },300);
-        SnackbarUtil.showSnackbarShort("copy success!");
+        SnackbarUtil.showSnackBarShort("copy success!");
     }
 
     private void init(){
@@ -228,6 +227,8 @@ public class PopupHeaderView extends PopupWindow {
         map.put("mainProcessName", instance.getMainProcessName());
         map.put("retentionDays", String.valueOf(instance.getRetentionDays()));
         map.put("databaseLimit", String.valueOf(instance.getDatabaseLimit()));
+        map.put("flushInterval", String.valueOf(instance.getFlushInterval()));
+        map.put("flushBulkSize", String.valueOf(instance.getFlushBulkSize()));
         EventPropsRecyclerViewAdapter adapter = new EventPropsRecyclerViewAdapter(mActivity, map);
         infoViewRV.setAdapter(adapter);
     }

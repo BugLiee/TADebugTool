@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_alignParentTop="true"
+            android:id="@+id/props_constructor_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#6F6459">
+            <TextView
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="属性构造器"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"/>
+        </com.google.android.material.appbar.AppBarLayout>
+        <LinearLayout
+            android:layout_below="@+id/props_constructor_top_bar"
+            android:layout_above="@+id/props_constructor_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#706A64"
+            android:orientation="horizontal">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/popup_props_constructor_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/popup_props_constructor_fl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/props_constructor_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:background="#6F6459"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/prop_input_item_add_tv"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="添加"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="36dp"/>
+            <TextView
+                android:id="@+id/prop_input_item_add_positive_tv"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="提交"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="36dp"/>
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

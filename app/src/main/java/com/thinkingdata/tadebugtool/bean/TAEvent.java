@@ -39,6 +39,7 @@ public class TAEvent extends LitePalSupport implements Serializable {
         setEventType(eventJson.optString("#type"));
         setDistinctID(eventJson.optString("#distinct_id"));
         setAccountID(eventJson.optString("#account_id"));
+        setBFEventID(eventJson.optString("#event_id"));
         try {
             JSONObject props = new JSONObject(eventJson.optString("properties"));
             JSONObject presetProps = new JSONObject();
@@ -61,6 +62,18 @@ public class TAEvent extends LitePalSupport implements Serializable {
         }
 
     }
+
+    public String getBFEventID() {
+        return BFEventID;
+    }
+
+    public void setBFEventID(String BFEventID) {
+        this.BFEventID = BFEventID;
+    }
+
+    @Column(defaultValue = "unknown")
+    private String BFEventID;
+
 
     @Column(defaultValue = "unknown")
     private String eventID;

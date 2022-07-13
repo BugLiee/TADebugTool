@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#3690B8"
+    android:background="#44B3C6"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
@@ -12,18 +12,19 @@
         <TextView
             android:id="@+id/event_time_tv"
             android:textColor="#ffffff"
-            android:paddingLeft="18dp"
+            android:paddingStart="18dp"
+            android:singleLine="true"
             android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="46dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"/>
         <TextView
+            android:paddingStart="18dp"
             android:gravity="center_vertical"
             android:textColor="#ffffff"
+            android:singleLine="true"
             android:id="@+id/event_title_tv"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="46dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
     </LinearLayout>
     <View
         android:layout_below="@+id/event_title_top_ll"
@@ -33,6 +34,7 @@
         android:layout_height="2dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:background="#635E5A"
         android:layout_below="@+id/bottom_line"
         android:id="@+id/event_prop_rv"
         android:layout_width="match_parent"

@@ -72,7 +72,9 @@ public class PopupPropertiesTypeChooserView extends PopupWindow {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mType = typeList[position];
+                if (!mType.equals(typeList[position])) {
+                    mType = typeList[position];
+                }
             }
 
             @Override

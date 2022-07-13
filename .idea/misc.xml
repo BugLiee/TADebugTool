@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/app_info_list_bg_round.xml" value="0.116" />
         <entry key="app/src/main/res/drawable/filter_view_water_selector.xml" value="0.1265" />
         <entry key="app/src/main/res/drawable/item_app_info_list_view_water_selector.xml" value="0.1725" />
+        <entry key="app/src/main/res/drawable/mock_view_water_selector.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/shape_bottom_line.xml" value="0.1175" />
         <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.1175" />
         <entry key="app/src/main/res/drawable/view_water_selector.xml" value="0.18" />
@@ -19,6 +20,8 @@
         <entry key="app/src/main/res/layout/fragment_history_content.xml" value="0.10144927536231885" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/fragment_mock.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_mock_content.xml" value="0.3151041666666667" />
+        <entry key="app/src/main/res/layout/fragment_mock_history.xml" value="0.3151041666666667" />
         <entry key="app/src/main/res/layout/guidance_menu.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/guidance_menu_item.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/layout/header_main.xml" value="0.25" />
@@ -36,6 +39,7 @@
         <entry key="app/src/main/res/layout/item_prop_collection_input_view.xml" value="0.2859375" />
         <entry key="app/src/main/res/layout/item_prop_map_input_view.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/item_prop_type_chooser_simple.xml" value="0.17708333333333334" />
+        <entry key="app/src/main/res/layout/item_props_constructor_type.xml" value="0.24728260869565216" />
         <entry key="app/src/main/res/layout/item_simple_spinner_simple.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/item_spinner.xml" value="0.2359375" />
         <entry key="app/src/main/res/layout/popup_app_list.xml" value="0.18" />
@@ -48,6 +52,10 @@
         <entry key="app/src/main/res/layout/popup_props_constructor_collection_view.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/popup_props_constructor_map_view.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/popup_props_constructor_normal_view.xml" value="0.17604166666666668" />
+        <entry key="app/src/main/res/layout/popup_props_constructor_view.xml" value="0.11978912353515625" />
+        <entry key="app/src/main/res/layout/view_props_constructor_collection.xml" value="0.18489583333333334" />
+        <entry key="app/src/main/res/layout/view_props_constructor_map.xml" value="0.16927083333333334" />
+        <entry key="app/src/main/res/layout/view_props_constructor_normal.xml" value="0.16666666666666666" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.17708333333333334" />
       </map>
     </option>

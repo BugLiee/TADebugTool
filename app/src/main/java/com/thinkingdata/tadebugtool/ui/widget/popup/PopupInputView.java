@@ -18,7 +18,6 @@ import androidx.cardview.widget.CardView;
 
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.ui.widget.InputAppIDItemView;
-import com.thinkingdata.tadebugtool.ui.widget.ResizeableLayout;
 import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
@@ -106,7 +105,7 @@ public class PopupInputView extends PopupWindow {
                 }
                 if (appIDs.size() == 0) {
                     // show toast
-                    SnackbarUtil.showSnackbarShort("请先输入有效的AppID后再次确认！");
+                    SnackbarUtil.showSnackBarShort("请先输入有效的AppID后再次确认！");
                 } else {
                     //callback
                     if (onSubmitClickListener != null) {
@@ -136,7 +135,7 @@ public class PopupInputView extends PopupWindow {
             appIDItems.add(inputAppIDItemView);
             update(getWidth(), getHeight() + contentLL.getChildAt(0).getHeight());
         } else {
-            SnackbarUtil.showSnackbarMid("当前版本仅支持单实例模式 ... 如有需求请联系开发人员");
+            SnackbarUtil.showSnackBarMid("当前版本仅支持单实例模式 ... 如有需求请联系开发人员");
         }
     }
 

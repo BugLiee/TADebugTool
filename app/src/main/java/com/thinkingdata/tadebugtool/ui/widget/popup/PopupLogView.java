@@ -28,8 +28,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.thinkingdata.tadebugtool.R;
+import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
 import java.io.File;
@@ -152,7 +152,7 @@ public class PopupLogView  extends CardView {
                         e.printStackTrace();
                     }
                 } else {
-                    Snackbar.make(mContext, instance, "please link first. ", 1600).show();
+                    SnackbarUtil.showSnackBarMid("please link first. ", instance);
                 }
             }
 
@@ -192,13 +192,13 @@ public class PopupLogView  extends CardView {
         }));
         startLinkBtn.setOnClickListener(v -> {
             if (mTAToolServer == null) {
-                Snackbar.make(mContext, instance, "start link app , please wait 1-2 second. ", 1600).show();
+                SnackbarUtil.showSnackBarMid("start link app , please wait 1-2 second. ", instance);
                 Intent intent = new Intent();
                 intent.setAction(KEY_TA_TOOL_ACTION);
                 intent.setPackage(packageName);
                 mContext.getApplicationContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
             } else {
-                Snackbar.make(mContext, instance, "link succeeded. ", 1600).show();
+                SnackbarUtil.showSnackBarMid("link succeeded. ", instance);
             }
         });
         logTagBtn.setOnClickListener(v -> {
@@ -243,7 +243,7 @@ public class PopupLogView  extends CardView {
                     });
                 }
             } else {
-                Snackbar.make(mContext, instance, "please link first. ", 1600).show();
+                SnackbarUtil.showSnackBarMid("please link first. ", instance);
             }
 
         });
@@ -312,12 +312,12 @@ public class PopupLogView  extends CardView {
             if (logTV != null ) {
                 String text = logTV.getText().toString();
                 if (text.isEmpty()) {
-                    Snackbar.make(mContext, instance, "log is empty!", 1600).show();
+                    SnackbarUtil.showSnackBarMid("log is empty!", instance);
                 } else {
                     exportCurrentLog(logTV.getText().toString());
                 }
             } else {
-                Snackbar.make(mContext, instance, "logTV is null!", 1600).show();
+                SnackbarUtil.showSnackBarMid("logTV is null!", instance);
             }
         });
         instance = this;
@@ -344,10 +344,10 @@ public class PopupLogView  extends CardView {
                         os = new FileOutputStream(logFile);
                         os.write(log.getBytes("UTF-8"));
                         os.flush();
-                        Snackbar.make(mContext, instance, "export succeed , path : " + filePath, 3000).show();
+                        SnackbarUtil.showSnackBarMid("export succeed , path : " + filePath, instance);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Snackbar.make(mContext, instance, "export failed, please check log !", 3000).show();
+                        SnackbarUtil.showSnackBarMid("export failed, please check log !", instance);
                     } finally {
                         if (os != null) {
                             try {

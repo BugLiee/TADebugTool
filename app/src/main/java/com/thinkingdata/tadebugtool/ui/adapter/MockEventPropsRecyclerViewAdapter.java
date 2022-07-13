@@ -49,16 +49,19 @@ public class MockEventPropsRecyclerViewAdapter extends RecyclerView.Adapter<Mock
     }
 
     public void addItem(JSONObject sourceProps) {
-        try {
-            TAUtil.mergeJSONObject(sourceProps, props, TimeZone.getTimeZone("GMT:+8:00"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Iterator<String> iterator = props.keys();
+        Iterator<String> iterator = sourceProps.keys();
         while (iterator.hasNext()) {
             String key = iterator.next();
-            keys.add(key);
-            values.add(props.optString(key));
+            if (!keys.contains(key)) {
+                keys.add(key);
+                String value = sourceProps.optString(key);
+                values.add(value);
+                try {
+                    props.put(key, value);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         notifyDataSetChanged();
     }
@@ -79,7 +82,7 @@ public class MockEventPropsRecyclerViewAdapter extends RecyclerView.Adapter<Mock
 
     @Override
     public int getItemCount() {
-        return props.length();
+        return keys.size();
     }
 
     public void removeAll() {

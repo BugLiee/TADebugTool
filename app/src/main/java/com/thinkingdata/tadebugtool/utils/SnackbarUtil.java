@@ -25,21 +25,39 @@ public class SnackbarUtil {
         mView = view;
     }
 
-    public static void showSnackbarShort(String msg) {
+    public static void showSnackBarShort(String msg) {
         if (mView != null) {
             Snackbar.make(mView, msg, SHORT_DURATION).show();
         }
     }
 
-    public static void showSnackbarLong(String msg) {
+    public static void showSnackBarShort(String msg, View rooView) {
+        if (rooView != null) {
+            Snackbar.make(rooView, msg, SHORT_DURATION).show();
+        }
+    }
+
+    public static void showSnackBarLong(String msg) {
         if (mView != null) {
             Snackbar.make(mView, msg, LONG_DURATION).show();
         }
     }
 
-    public static void showSnackbarMid(String msg) {
+    public static void showSnackBarLong(String msg, View rooView) {
+        if (rooView != null) {
+            Snackbar.make(rooView, msg, LONG_DURATION).show();
+        }
+    }
+
+    public static void showSnackBarMid(String msg) {
         if (mView != null) {
             Snackbar.make(mView, msg, MID_DURATION).show();
+        }
+    }
+
+    public static void showSnackBarMid(String msg, View rooView) {
+        if (rooView != null) {
+            Snackbar.make(rooView, msg, MID_DURATION).show();
         }
     }
 }

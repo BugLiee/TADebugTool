@@ -756,6 +756,9 @@ public class FloatLayout extends FrameLayout {
                     instanceJSon.put("timestamp", timestamp);
                     instanceJSon.put("instanceID", mAppID);
                     //检查匹配和跨域问题
+                    String url = instanceJSon.optString("url");
+
+//                    TAUtil.checkAppIDAndUrl(mAppID, url.contains("/sync") ? url.substring(0, url.lastIndexOf("/sync")) : url);
                     instanceJSon.put("usable", true);
                     instanceJSon.put("unUsableReason", "我跨域了");
 

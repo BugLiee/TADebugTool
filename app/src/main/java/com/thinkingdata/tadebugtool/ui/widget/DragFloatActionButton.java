@@ -255,7 +255,7 @@ public class DragFloatActionButton extends FloatingActionButton {
                     }
                     if (unLock) {
                         if (unLockListener != null) {
-                            SnackbarUtil.showSnackbarMid("恭喜你进入了高级模式");
+                            SnackbarUtil.showSnackBarMid("恭喜你进入了高级模式");
                             unLockListener.unLock();
                         }
                     }

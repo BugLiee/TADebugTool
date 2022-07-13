@@ -61,9 +61,8 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
 
     @Override
     public void onBindViewHolder(@NonNull HistoryRecyclerHolder holder, int position) {
-        if (position == 0) {
+        if (position == lastSelectPos) {
             //设置选中
-            lastSelectPos = position;
             lastSelectTV = holder.textView;
             lastSelectTV.setSelected(true);
         }

@@ -30,8 +30,6 @@ import com.thinkingdata.tadebugtool.common.TAConstants;
 import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import com.thinkingdata.tadebugtool.utils.TAUtil;
 
-import java.util.List;
-
 /**
  * < Input >.
  *
@@ -93,7 +91,7 @@ public class PopupFilterView extends PopupWindow {
             propET.setVisibility(View.GONE);
             titleTV.setText("请选择事件类型");
         } else {
-            SnackbarUtil.showSnackbarMid("显示过滤器失败，请重启或者联系开发人员");
+            SnackbarUtil.showSnackBarMid("显示过滤器失败，请重启或者联系开发人员");
             return;
         }
     }
