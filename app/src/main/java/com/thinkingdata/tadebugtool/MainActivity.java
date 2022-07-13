@@ -3,11 +3,16 @@ package com.thinkingdata.tadebugtool;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
 
     private List<TAInstance> instances;
-    private List<TAEvent> currentEvents;
     private boolean isItemOpened = false;
 
 
@@ -69,33 +73,6 @@ public class MainActivity extends AppCompatActivity {
         queryAppList();
         initView();
     }
-
-    private void initData() {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if ((instances == null || connected) && !isItemOpened) {
-                    instances = LitePal.findAll(TAInstance.class);
-                    if (instances.size() > 0) {
-                        TAInstance instance = instances.get(instances.size()-1);
-                        String instanceName = instance.getName() + instance.getTime();
-                        currentEvents = LitePal.where("instanceName = ?", instanceName).find(TAEvent.class);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                homeFragment.notifyDataChange(currentEvents);
-                            }
-                        });
-                    }
-                    if (!connected) {
-                        cancel();
-                    }
-                }
-            }
-            //连接中则5秒查一次
-        }, 100, connected ? 5000 : 100);
-    }
-
 
     public static boolean isAdvance = false;
 
@@ -122,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         //bind navigation & fragment
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         BottomNavigationView navigationView = (BottomNavigationView) this.findViewById(R.id.nav_view);
+
         NavigationUI.setupWithNavController(navigationView, navController);
         homeFragment = (HomeFragment) (((NavHostFragment) getSupportFragmentManager().getFragments().get(0)).getChildFragmentManager().getFragments().get(0));
         homeFragment.initItemStateListener(new EventListRecyclerViewAdapter.StateChangeListener() {
@@ -132,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         });
         //initToolbar
         toolbar = this.findViewById(R.id.toolbar);
-        toolbar.setTitle("Global");
+        toolbar.setTitle("TAT");
         setSupportActionBar(toolbar);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,8 +182,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         handlerIntent();
-        instances = null;
-        initData();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(0xFF6F6459);
+        }
     }
 
     @Override
@@ -220,10 +199,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void tryShowHeader() {
+        instances = LitePal.findAll(TAInstance.class);
         if (instances.size() > 0) {
             PopupHeaderView popupHeaderView = new PopupHeaderView(mActivity);
             //取最新一次的实例（上次 或 当次）
-            popupHeaderView.initRVData(instances.get(instances.size()-1));
+            popupHeaderView.initRVData(instances.get(instances.size() - 1));
             popupHeaderView.showAtLocation(mActivity.findViewById(R.id.root_msg_rl), Gravity.TOP | Gravity.START, 0, 0);
         } else {
             SnackbarUtil.showSnackBarMid("暂时还没有进行过应用调试哦-.-");

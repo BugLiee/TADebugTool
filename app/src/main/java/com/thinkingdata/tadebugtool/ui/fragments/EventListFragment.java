@@ -13,6 +13,7 @@ import static com.thinkingdata.tadebugtool.common.TAConstants.FILTER_TIME_ARRAY;
 import static com.thinkingdata.tadebugtool.common.TAConstants.FILTER_TYPE_TIME_SORT;
 import static com.thinkingdata.tadebugtool.common.TAConstants.PROFILE_EVENT_LiST;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +61,13 @@ public class EventListFragment extends Fragment {
     private String propFilterValue = "";
     private String eventTypeFilterValue = FILTER_EVENT_TYPE_ARRAY[0];
 
+    private Activity mActivity;
+    public EventListFragment() {
+    }
+
+    public void setActivity(Activity activity){
+        mActivity = activity;
+    }
 
     @Nullable
     @Override
@@ -71,11 +79,11 @@ public class EventListFragment extends Fragment {
 
     private void initView(View view) {
         recyclerView = view.findViewById(R.id.event_list_rv);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         if (adapter == null) {
-            adapter = new EventListRecyclerViewAdapter(getActivity());
+            adapter = new EventListRecyclerViewAdapter(mActivity);
         }
         recyclerView.setAdapter(adapter);
     }
@@ -92,14 +100,7 @@ public class EventListFragment extends Fragment {
         showEvents.addAll(allEvents);
         if (timeFilter) {
             if (timeFilterValue.equals(FILTER_TIME_ARRAY[1])) {
-                if (!isReverse) {
-                    isReverse = true;
-                    Collections.reverse(showEvents);
-                }
-            } else {
-                if (isReverse) {
-                    isReverse = false;
-                }
+                Collections.reverse(showEvents);
             }
         }
 
@@ -150,7 +151,7 @@ public class EventListFragment extends Fragment {
             }
         }
         if (adapter == null) {
-            adapter = new EventListRecyclerViewAdapter(getActivity());
+            adapter = new EventListRecyclerViewAdapter(mActivity);
         }
         adapter.notifyItemsChanged(showEvents);
     }

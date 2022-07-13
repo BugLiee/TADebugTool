@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:background="#635A4E"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -13,7 +14,7 @@
             android:id="@+id/history_menu_appbar_top"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="#87C2CA">
+            android:background="#594B3D">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -23,12 +24,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textColor="#ffffff"
                     android:text="@string/text_history_menu" />
             </RelativeLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:background="#33A2B5"
             android:id="@+id/history_menu_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

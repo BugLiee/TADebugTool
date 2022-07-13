@@ -245,7 +245,7 @@ public class PopupInfoView extends CardView implements View.OnLongClickListener{
                             try {
                                 appInfoJsonObject = new JSONObject(mApplicationInfoStr);
                             } catch (JSONException e) {
-                                e.printStackTrace();
+//                                e.printStackTrace();
                             }
                             serverUrlSpinner.setSelection(position);
                             if (appInfoJsonObject != null) {

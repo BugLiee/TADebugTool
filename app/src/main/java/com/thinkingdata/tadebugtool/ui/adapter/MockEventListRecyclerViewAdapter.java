@@ -43,7 +43,8 @@ public class MockEventListRecyclerViewAdapter extends RecyclerView.Adapter<MockE
     }
 
 
-    public void addItem(List<TAMockEvent> list) {
+    public void notifyDataChanged(List<TAMockEvent> list) {
+        mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }

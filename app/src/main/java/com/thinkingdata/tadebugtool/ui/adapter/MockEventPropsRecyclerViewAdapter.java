@@ -59,7 +59,7 @@ public class MockEventPropsRecyclerViewAdapter extends RecyclerView.Adapter<Mock
                 try {
                     props.put(key, value);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         }

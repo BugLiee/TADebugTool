@@ -8,6 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:background="#6F6459"
         android:layout_height="match_parent">
 
         <fragment
@@ -16,18 +17,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/nav_view"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/top_app_bar"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/nav_view"
             app:navGraph="@navigation/mobile_navigation" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/top_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
             android:layout_alignParentTop="true"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Widget.AppCompat.PopupMenu.Overflow" />
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#6F6459"
+                app:popupTheme="@style/Widget.AppCompat.PopupMenu.Overflow" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_view"
@@ -36,7 +42,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:background="?android:attr/windowBackground"
+            android:background="#6F6459"
             app:headerLayout="@layout/header_main"
             app:menu="@menu/bottom_nav_menu" />
     </RelativeLayout>
@@ -55,6 +61,6 @@
             android:layout_marginBottom="?actionBarSize"
             android:scaleType="center"
             android:src="@mipmap/ic_float_logo2"
-            app:fab_colorNormal="#ffffff" />
+            app:fab_colorNormal="#A1732F" />
     </RelativeLayout>
 </FrameLayout>

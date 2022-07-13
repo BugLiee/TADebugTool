@@ -187,7 +187,7 @@ public class PopupPropertiesConstructorView extends PopupWindow {
                     try {
                         onPositiveListener.onPositive(new JSONObject(props.toString()));
                     } catch (JSONException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                 }
                 props = null;

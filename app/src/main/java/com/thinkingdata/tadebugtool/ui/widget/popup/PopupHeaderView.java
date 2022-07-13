@@ -212,7 +212,7 @@ public class PopupHeaderView extends PopupWindow {
             JSONObject presets = new JSONObject(instance.getPresetProps());
             deviceIDTV.setText(presets.optString("deviceID"));
         } catch (JSONException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         //
         map.put("libVersion", instance.getLibVersion());

@@ -117,7 +117,7 @@ public class TAToolServiceClient extends Service {
                         TAEvent event = new TAEvent(cEventJson);
                         event.save();
                     } catch (JSONException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                     isLoop = true;
                     handleMsg(lastMsg);

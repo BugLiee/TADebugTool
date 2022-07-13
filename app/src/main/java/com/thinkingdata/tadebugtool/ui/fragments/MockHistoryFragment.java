@@ -4,7 +4,6 @@
 
 package com.thinkingdata.tadebugtool.ui.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +14,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.bean.TAMockEvent;
-import com.thinkingdata.tadebugtool.ui.adapter.ExtensionTagFragmentPagerAdapter;
 import com.thinkingdata.tadebugtool.ui.adapter.MockEventListRecyclerViewAdapter;
 
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * < Extension >.
@@ -41,6 +39,8 @@ public class MockHistoryFragment extends Fragment {
     RecyclerView mockHistoryEventRV;
 
     MockEventListRecyclerViewAdapter mockEventListRecyclerViewAdapter;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -58,14 +58,25 @@ public class MockHistoryFragment extends Fragment {
             mockEventListRecyclerViewAdapter = new MockEventListRecyclerViewAdapter(getActivity());
         }
         mockHistoryEventRV.setAdapter(mockEventListRecyclerViewAdapter);
-        List<TAMockEvent> list = new ArrayList<>(LitePal.findAll(TAMockEvent.class));
-        mockEventListRecyclerViewAdapter.addItem(list);
+        refreshData();
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_fresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshData();
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                },800);
+            }
+        });
     }
 
-
-    public void addItem(TAMockEvent event) {
-        List<TAMockEvent> events = new ArrayList<>();
-        events.add(event);
-        mockEventListRecyclerViewAdapter.addItem(events);
+    private void refreshData() {
+        List<TAMockEvent> list = new ArrayList<>(LitePal.findAll(TAMockEvent.class));
+        mockEventListRecyclerViewAdapter.notifyDataChanged(list);
     }
 }

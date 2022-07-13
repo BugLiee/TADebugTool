@@ -782,7 +782,7 @@ public class FloatLayout extends FrameLayout {
                                     instanceJSon.put("usable", false);
                                     instanceJSon.put("unUsableReason", "appid & server 不匹配");
                                 } catch (JSONException ex) {
-                                    ex.printStackTrace();
+//                                    ex.printStackTrace();
                                 }
                             }finally {
                                 TAInstance instance = new TAInstance(instanceJSon);

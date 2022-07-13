@@ -24,10 +24,13 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.thinkingdata.tadebugtool.R;
 import com.thinkingdata.tadebugtool.bean.TAEvent;
+import com.thinkingdata.tadebugtool.bean.TAInstance;
 import com.thinkingdata.tadebugtool.common.TAConstants;
 import com.thinkingdata.tadebugtool.ui.adapter.EventListRecyclerViewAdapter;
 import com.thinkingdata.tadebugtool.ui.adapter.TagFragmentPagerAdapter;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupFilterView;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,8 @@ public class HomeFragment extends Fragment {
     private ImageView filterTimeIV;
     private ImageView filterPropIV;
     private ImageView filterEventTypeIV;
+    private ImageView filterResetIV;
+    private ImageView filterRefreshIV;
 
     private List<EventListFragment> fragments = new ArrayList<>();
     private List<String> tabs = new ArrayList<>();
@@ -57,11 +62,6 @@ public class HomeFragment extends Fragment {
 
     private boolean isConnected = false;
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override
@@ -114,6 +114,7 @@ public class HomeFragment extends Fragment {
         }
 //        tabs.add("历史记录");
         currentFragment = new EventListFragment();
+        currentFragment.setActivity(getActivity());
         fragments.add(currentFragment);
 //        fragments.add(new EventListFragment());
         viewPager.setAdapter(new TagFragmentPagerAdapter(getChildFragmentManager(), getLifecycle(), fragments));
@@ -132,6 +133,8 @@ public class HomeFragment extends Fragment {
         filterTimeIV = view.findViewById(R.id.filter_time_sort);
         filterPropIV = view.findViewById(R.id.filter_prop);
         filterEventTypeIV = view.findViewById(R.id.filter_event_type);
+        filterResetIV = view.findViewById(R.id.filter_reset);
+        filterRefreshIV = view.findViewById(R.id.filter_refresh);
 
         filterIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +160,34 @@ public class HomeFragment extends Fragment {
                 showFilterPopupWindow(FILTER_TYPE_EVENT_TYPE);
             }
         });
+        filterResetIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentFragment.resetFilter();
+                filterView = null;
+                currentFragment.notifyDataChange(TAConstants.FILTER_TYPE_TIME_SORT, TAConstants.FILTER_TIME_ARRAY[0]);
+            }
+        });
+        filterRefreshIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<TAInstance> instances = LitePal.findAll(TAInstance.class);
+                if (instances.size() > 0) {
+                    TAInstance instance = instances.get(instances.size() - 1);
+                    String instanceName = instance.getName() + instance.getTime();
+                    List<TAEvent> events = LitePal.where("instanceName = ?", instanceName).find(TAEvent.class);
+                    notifyDataChange(events);
+                }
+            }
+        });
+
+        List<TAInstance> instances = LitePal.findAll(TAInstance.class);
+        if (instances.size() > 0) {
+            TAInstance instance = instances.get(instances.size() - 1);
+            String instanceName = instance.getName() + instance.getTime();
+            List<TAEvent> events = LitePal.where("instanceName = ?", instanceName).find(TAEvent.class);
+            notifyDataChange(events);
+        }
     }
 
 
@@ -180,7 +211,7 @@ public class HomeFragment extends Fragment {
         RelativeLayout layout = (RelativeLayout) filterIV.getParent();
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) layout.getLayoutParams();
         if (layout.getHeight() == filterIV.getHeight()) {
-            layoutParams.height = filterIV.getHeight() * 4;
+            layoutParams.height = filterIV.getHeight() * 6;
         } else {
             layoutParams.height = filterIV.getHeight();
         }

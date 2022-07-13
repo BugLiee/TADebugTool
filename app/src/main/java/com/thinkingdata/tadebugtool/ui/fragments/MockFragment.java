@@ -66,7 +66,7 @@ public class MockFragment extends Fragment {
             @Override
             public void onTrack(TAMockEvent event) {
                 //更新数据
-                mockHistoryFragment.addItem(event);
+//                mockHistoryFragment.addItem(event);
             }
         });
 

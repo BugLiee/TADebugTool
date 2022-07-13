@@ -59,7 +59,7 @@ public class TAEvent extends LitePalSupport implements Serializable {
             //传入 或 自定义属性
             setProps(userProps.toString());
         } catch (JSONException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
     }

@@ -9,7 +9,7 @@
         <shape>
             <!--圆形效果-->
 <!--            <corners android:radius="?actionBarSize" />-->
-            <solid android:color="#33A2B5" />
+            <solid android:color="#6F6459" />
         </shape>
     </item>
 </ripple>

@@ -19,7 +19,7 @@
         android:layout_marginStart="-10dp"
         android:layout_marginTop="20dp"
         android:foreground="@mipmap/ic_triangle_right"
-        app:cardBackgroundColor="#72ABD8"
+        app:cardBackgroundColor="#6F6459"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp" />
 
@@ -32,7 +32,7 @@
             android:id="@+id/fragment_content_fl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#33A2B5" />
+            android:background="#6F6459" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="#33A2B5"
+                app:cardBackgroundColor="#6F6459"
                 app:cardCornerRadius="5dp">
 
                 <RelativeLayout
@@ -87,6 +87,23 @@
                         android:background="@drawable/filter_view_water_selector"
                         android:scaleType="centerInside"
                         android:src="@mipmap/ic_filter_prop" />
+
+                    <ImageView
+                        android:layout_below="@id/filter_event_type"
+                        android:id="@+id/filter_reset"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/filter_view_water_selector"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_reset" />
+                    <ImageView
+                        android:layout_below="@id/filter_reset"
+                        android:id="@+id/filter_refresh"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/filter_view_water_selector"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_refresh" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
         </RelativeLayout>

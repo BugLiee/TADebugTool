@@ -99,7 +99,7 @@ public class EventPropsRecyclerViewAdapter extends RecyclerView.Adapter<EventPro
             strings = new String[propsJson.length()];
         } catch (JSONException e) {
             strings = valueStr.split(",");
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         int pos = position;
         String[] finalStrings = strings;

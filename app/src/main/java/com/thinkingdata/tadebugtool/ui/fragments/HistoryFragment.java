@@ -64,19 +64,19 @@ public class HistoryFragment extends Fragment {
     private int originWidth = 0;
     private LinearLayout.LayoutParams menuLayoutParams;
 
-    EventListFragment fragment;
+    private EventListFragment fragment;
 
     private ImageView filterIV;
     private ImageView filterTimeIV;
     private ImageView filterPropIV;
     private ImageView filterEventTypeIV;
+    private ImageView filterResetIV;
+    private ImageView filterRefreshIV;
 
     private int lastSelectPos = 0;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private List<List<TAEvent>> events;
+    private List<TAInstance> instances;
 
     @Nullable
     @Override
@@ -97,9 +97,9 @@ public class HistoryFragment extends Fragment {
         if (adapter == null) {
             adapter = new HistoryRecyclerViewAdapter(getContext());
         }
-        List<TAInstance> instances = LitePal.findAll(TAInstance.class);
+        instances = LitePal.findAll(TAInstance.class);
         List<String> names = new ArrayList<>();
-        List<List<TAEvent>> events = new ArrayList<>();
+        events = new ArrayList<>();
         for (int i = 0; i < instances.size(); i++) {
             names.add(instances.get(i).getName());
             List<TAEvent> eventList = LitePal.where("instanceName = ?", instances.get(i).getName() + instances.get(i).getTime()).find(TAEvent.class);
@@ -112,6 +112,7 @@ public class HistoryFragment extends Fragment {
 
         //        fragment. == TAInstance  new
         fragment = new EventListFragment();
+        fragment.setActivity(getActivity());
         ft.replace(R.id.fragment_content_fl, fragment);
         ft.commitNow();
         if (events.size() > 0) {
@@ -122,6 +123,7 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onClick(int position) {
                 if (lastSelectPos != position) {
+                    lastSelectPos = position;
                     // switch TAInstance
                     fragment.resetFilter();
                     filterView = null;
@@ -147,6 +149,8 @@ public class HistoryFragment extends Fragment {
         filterTimeIV = view.findViewById(R.id.filter_time_sort);
         filterPropIV = view.findViewById(R.id.filter_prop);
         filterEventTypeIV = view.findViewById(R.id.filter_event_type);
+        filterResetIV = view.findViewById(R.id.filter_reset);
+        filterRefreshIV = view.findViewById(R.id.filter_refresh);
 
         filterIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +174,28 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showFilterPopupWindow(FILTER_TYPE_EVENT_TYPE);
+            }
+        });
+
+        filterResetIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.resetFilter();
+                filterView = null;
+                fragment.notifyDataChange(TAConstants.FILTER_TYPE_TIME_SORT, TAConstants.FILTER_TIME_ARRAY[0]);
+            }
+        });
+        filterRefreshIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (instances.size() > 0) {
+                    events = new ArrayList<>();
+                    for (int i = 0; i < instances.size(); i++) {
+                        List<TAEvent> eventList = LitePal.where("instanceName = ?", instances.get(i).getName() + instances.get(i).getTime()).find(TAEvent.class);
+                        events.add(eventList);
+                    }
+                    fragment.notifyDataChange(events.get(lastSelectPos));
+                }
             }
         });
     }
@@ -199,7 +225,7 @@ public class HistoryFragment extends Fragment {
         RelativeLayout layout = (RelativeLayout) filterIV.getParent();
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) layout.getLayoutParams();
         if (layout.getHeight() == filterIV.getHeight()) {
-            layoutParams.height = filterIV.getHeight() * 4;
+            layoutParams.height = filterIV.getHeight() * 6;
         } else {
             layoutParams.height = filterIV.getHeight();
         }

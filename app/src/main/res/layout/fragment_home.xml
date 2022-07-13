@@ -14,7 +14,7 @@
             android:layout_height="match_parent">
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/home_tl"
-                android:background="#33A2B5"
+                android:background="#6F6459"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"/>
             <View
@@ -22,13 +22,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp" />
             <androidx.viewpager2.widget.ViewPager2
-                android:background="#33A2B5"
+                android:background="#6F6459"
                 android:id="@+id/home_vg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
         <androidx.cardview.widget.CardView
-            app:cardBackgroundColor="#33A2B5"
+            app:cardBackgroundColor="#6F6459"
             app:cardCornerRadius="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
@@ -56,6 +56,14 @@
                     android:scaleType="centerInside"
                     android:src="@mipmap/ic_filter_time" />
                 <ImageView
+                    android:layout_below="@id/filter_time_sort"
+                    android:id="@+id/filter_prop"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/filter_view_water_selector"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_filter_prop" />
+                <ImageView
                     android:layout_below="@id/filter_prop"
                     android:id="@+id/filter_event_type"
                     android:layout_width="40dp"
@@ -64,13 +72,22 @@
                     android:scaleType="centerInside"
                     android:src="@mipmap/ic_filter_event_type" />
                 <ImageView
-                    android:layout_below="@id/filter_time_sort"
-                    android:id="@+id/filter_prop"
+                    android:layout_below="@id/filter_event_type"
+                    android:id="@+id/filter_reset"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/filter_view_water_selector"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/ic_filter_prop" />
+                    android:src="@mipmap/ic_reset" />
+                <ImageView
+                    android:layout_below="@id/filter_reset"
+                    android:id="@+id/filter_refresh"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/filter_view_water_selector"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_refresh" />
+
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </FrameLayout>

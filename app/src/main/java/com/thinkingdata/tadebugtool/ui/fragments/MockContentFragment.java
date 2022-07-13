@@ -218,7 +218,7 @@ public class MockContentFragment extends Fragment {
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_simple_spinner_simple, parent, false);
                 TextView tv = view.findViewById(R.id.simple_spinner_item_tv);
                 tv.setTextColor(Color.WHITE);
-                tv.setBackgroundColor(Color.GRAY);
+                tv.setBackgroundColor(0xFF7E6E57);
                 tv.setText(eventTypeList[position]);
                 return view;
             }
@@ -228,7 +228,7 @@ public class MockContentFragment extends Fragment {
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_simple_spinner_simple, parent, false);
                 TextView tv = view.findViewById(R.id.simple_spinner_item_tv);
                 tv.setTextColor(Color.WHITE);
-                tv.setBackgroundColor(Color.GRAY);
+                tv.setBackgroundColor(0xFF7E6E57);
                 tv.setText(eventTypeList[position]);
                 return view;
             }
@@ -314,7 +314,7 @@ public class MockContentFragment extends Fragment {
         try {
             jsonObject.put(eventName, 0);
         } catch (JSONException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         mockEvent.setProps(jsonObject.toString());
         mockEvent.save();
@@ -402,7 +402,7 @@ public class MockContentFragment extends Fragment {
             presetObject.put("disk", presetProperties.disk);
             presetObject.put("systemLanguage", presetProperties.systemLanguage);
         } catch (JSONException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         mockEvent.setPresetProps(presetObject.toString());
         mockEvent.setProps(props.toString());
@@ -462,7 +462,7 @@ public class MockContentFragment extends Fragment {
             presetObject.put("disk", presetProperties.disk);
             presetObject.put("systemLanguage", presetProperties.systemLanguage);
         } catch (JSONException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         mockEvent.setPresetProps(presetObject.toString());
         mockEvent.setProps(props.toString());
