@@ -10,7 +10,7 @@
         android:id="@+id/mock_history_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#87C8A1"
+        android:background="#6F6459"
         />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

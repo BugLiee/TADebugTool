@@ -13,11 +13,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +29,11 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 import com.thinkingdata.tadebugtool.R;
+import com.thinkingdata.tadebugtool.RequestListener;
+import com.thinkingdata.tadebugtool.utils.TAUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import cn.thinkingdata.android.aidl.ITAToolServer;
 
@@ -180,8 +179,18 @@ public class PopupInfoView extends CardView implements View.OnLongClickListener{
                         TextView statusTV = view.findViewById(R.id.info_spinner_item_status);
                         TextView urlTV = view.findViewById(R.id.info_spinner_item);
                         urlTV.setText(urls[position]);
-                        statusTV.setText("正常");
-                        statusTV.setTextColor(Color.GREEN);
+                        TAUtil.checkUrl(mActivity, urls[position], new RequestListener() {
+                            @Override
+                            public void requestEnd(int code, String msg) {
+                                if (code == 200) {
+                                    statusTV.setText("正常");
+                                    statusTV.setTextColor(Color.GREEN);
+                                } else {
+                                    statusTV.setText("异常");
+                                    statusTV.setTextColor(Color.RED);
+                                }
+                            }
+                        });
                         return view;
                     }
 
@@ -193,8 +202,18 @@ public class PopupInfoView extends CardView implements View.OnLongClickListener{
                         TextView statusTV = view.findViewById(R.id.info_spinner_item_status);
                         TextView urlTV = view.findViewById(R.id.info_spinner_item);
                         urlTV.setText(urls[position]);
-                        statusTV.setText("正常");
-                        statusTV.setTextColor(Color.GREEN);
+                        TAUtil.checkUrl(mActivity, urls[position], new RequestListener() {
+                            @Override
+                            public void requestEnd(int code, String msg) {
+                                if (code == 200) {
+                                    statusTV.setText("正常");
+                                    statusTV.setTextColor(Color.GREEN);
+                                } else {
+                                    statusTV.setText("异常");
+                                    statusTV.setTextColor(Color.RED);
+                                }
+                            }
+                        });
                         return view;
                     }
                 };
@@ -206,8 +225,18 @@ public class PopupInfoView extends CardView implements View.OnLongClickListener{
                         TextView statusTV = view.findViewById(R.id.info_spinner_item_status);
                         TextView urlTV = view.findViewById(R.id.info_spinner_item);
                         urlTV.setText(appIDs[position]);
-                        statusTV.setText("正常");
-                        statusTV.setTextColor(Color.GREEN);
+                        TAUtil.checkAppIDAndUrl(urls[position], appIDs[position], new RequestListener() {
+                            @Override
+                            public void requestEnd(int code, String msg) {
+                                if (code == 200) {
+                                    statusTV.setText("正常");
+                                    statusTV.setTextColor(Color.GREEN);
+                                } else {
+                                    statusTV.setText("异常");
+                                    statusTV.setTextColor(Color.RED);
+                                }
+                            }
+                        });
                         return view;
                     }
 
@@ -218,8 +247,18 @@ public class PopupInfoView extends CardView implements View.OnLongClickListener{
                         TextView statusTV = view.findViewById(R.id.info_spinner_item_status);
                         TextView urlTV = view.findViewById(R.id.info_spinner_item);
                         urlTV.setText(appIDs[position]);
-                        statusTV.setText("正常");
-                        statusTV.setTextColor(Color.GREEN);
+                        TAUtil.checkAppIDAndUrl(urls[position], appIDs[position], new RequestListener() {
+                            @Override
+                            public void requestEnd(int code, String msg) {
+                                if (code == 200) {
+                                    statusTV.setText("正常");
+                                    statusTV.setTextColor(Color.GREEN);
+                                } else {
+                                    statusTV.setText("异常");
+                                    statusTV.setTextColor(Color.RED);
+                                }
+                            }
+                        });
                         return view;
                     }
                 };
@@ -249,9 +288,9 @@ public class PopupInfoView extends CardView implements View.OnLongClickListener{
                             }
                             serverUrlSpinner.setSelection(position);
                             if (appInfoJsonObject != null) {
-                                isMultiProcessTV.setText(String.valueOf(appInfoJsonObject.opt("is_multi_process")));
-                                sdkModeTV.setText(String.valueOf(appInfoJsonObject.opt("sdk_mode")));
-                                sdkTrackStatusTV.setText(String.valueOf(appInfoJsonObject.opt("track_status")));
+                                isMultiProcessTV.setText(String.valueOf(appInfoJsonObject.opt("isMultiProcess")));
+                                sdkModeTV.setText(String.valueOf(appInfoJsonObject.opt("sdkMode")));
+                                sdkTrackStatusTV.setText(String.valueOf(appInfoJsonObject.opt("trackState")));
                             }
                         }
                     }

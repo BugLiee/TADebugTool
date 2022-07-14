@@ -58,7 +58,6 @@
                 android:layout_toRightOf="@+id/mock_appid_tv"
                 android:background="@null"
                 android:singleLine="true"
-                android:text="1b1c1fef65e3482bad5c9d0e6a823356"
                 android:textColor="#ffffff" />
 
             <TextView
@@ -78,7 +77,6 @@
                 android:layout_toRightOf="@+id/mock_url_tv"
                 android:background="@null"
                 android:singleLine="true"
-                android:text="https://receiver.ta.thinkingdata.cn/"
                 android:textColor="#ffffff" />
 
 
@@ -99,7 +97,6 @@
                 android:layout_toRightOf="@+id/mock_account_tv"
                 android:background="@null"
                 android:singleLine="true"
-                android:text="account11"
                 android:textColor="#ffffff" />
 
             <TextView
@@ -119,7 +116,6 @@
                 android:layout_toRightOf="@+id/mock_distinct_tv"
                 android:background="@null"
                 android:singleLine="true"
-                android:text="distinct222"
                 android:textColor="#ffffff" />
 
             <TextView

@@ -260,7 +260,6 @@ public class DragFloatActionButton extends FloatingActionButton {
                         }
                     }
                 }
-                keyList.clear();
                 if (isDrag) {
                     //恢复按压效果
                     setPressed(false);

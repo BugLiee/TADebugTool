@@ -9,6 +9,7 @@ import static com.thinkingdata.tadebugtool.common.TAConstants.FILTER_TYPE_EVENT_
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,15 @@ public class HistoryFragment extends Fragment {
             adapter = new HistoryRecyclerViewAdapter(getContext());
         }
         instances = LitePal.findAll(TAInstance.class);
+        //限制50个实例
+        if (instances.size() > 50) {
+            for (int i = 0; i < instances.size() - 50; i++) {
+                String instanceName = instances.get(i).getName() + instances.get(i).getTime();
+                LitePal.deleteAll(TAEvent.class, "instanceName = ?", instanceName);
+                LitePal.deleteAll(TAInstance.class, "name = ? and time = ?", instances.get(i).getName(), instances.get(i).getTime());
+            }
+            instances = LitePal.findAll(TAInstance.class);
+        }
         List<String> names = new ArrayList<>();
         events = new ArrayList<>();
         for (int i = 0; i < instances.size(); i++) {

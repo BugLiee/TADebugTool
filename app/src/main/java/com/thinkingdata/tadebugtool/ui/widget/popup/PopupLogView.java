@@ -12,6 +12,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.method.ScrollingMovementMethod;
@@ -329,7 +330,7 @@ public class PopupLogView  extends CardView {
 
     private void exportCurrentLog(String log) {
         final String filePath = String.format(Locale.US, "%s/%s_%d_%s_%s_%s",
-                mContext.getCacheDir().getAbsolutePath(), "log", new Date().getTime(),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "log", new Date().getTime(),
                 VERSION, packageName, ".txt");
         try {
             new Thread() {

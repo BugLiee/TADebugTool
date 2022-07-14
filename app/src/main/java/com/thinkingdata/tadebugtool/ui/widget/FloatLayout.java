@@ -40,6 +40,7 @@ import androidx.cardview.widget.CardView;
 
 import com.thinkingdata.tadebugtool.MainActivity;
 import com.thinkingdata.tadebugtool.R;
+import com.thinkingdata.tadebugtool.RequestListener;
 import com.thinkingdata.tadebugtool.bean.TAInstance;
 import com.thinkingdata.tadebugtool.common.TAConstants;
 import com.thinkingdata.tadebugtool.ui.widget.popup.PopupInfoView;
@@ -743,10 +744,6 @@ public class FloatLayout extends FrameLayout {
         }
     };
 
-    public interface RequestListener{
-        void requestEnd(int code, String msg);
-    }
-
     public static String mAppID = "";
     public static String mAppName = "";
 
@@ -769,29 +766,44 @@ public class FloatLayout extends FrameLayout {
                     instanceJSon.put("appName", appName);
                     instanceJSon.put("appIcon", new String(Base64Coder.encode(TAUtil.drawableToByte(appIcon))));
 
-                    RequestListener requestListener = new RequestListener() {
+                    //检查匹配和跨域问题
+                    TAUtil.checkUrl(mActivity, instanceJSon.optString("url"), new RequestListener() {
                         @Override
                         public void requestEnd(int code, String msg) {
                             try {
-                                JSONObject msgJSON = new JSONObject(msg);
-                                if (code == 200 && msgJSON.optInt("code") == 0) {
+                                if (code == 200) {
                                     instanceJSon.put("usable", true);
+                                } else {
+                                    instanceJSon.put("usable", false);
+                                    instanceJSon.put("unUsableReason", "上报地址不可用，请检查服务器是否正常");
                                 }
                             } catch (JSONException e) {
-                                try {
-                                    instanceJSon.put("usable", false);
-                                    instanceJSon.put("unUsableReason", "appid & server 不匹配");
-                                } catch (JSONException ex) {
-//                                    ex.printStackTrace();
-                                }
+                                //
                             }finally {
-                                TAInstance instance = new TAInstance(instanceJSon);
-                                instance.save();
+                                TAUtil.checkAppIDAndUrl(instanceJSon.optString("url"), mAppID, new RequestListener() {
+                                    @Override
+                                    public void requestEnd(int code, String msg) {
+                                        try {
+                                            JSONObject msgJSON = new JSONObject(msg);
+                                            if (code == 200 && msgJSON.optInt("code") == 0) {
+                                                instanceJSon.put("usable", true);
+                                            }
+                                        } catch (JSONException e) {
+                                            try {
+                                                instanceJSon.put("usable", false);
+                                                instanceJSon.put("unUsableReason", "appid & server 不匹配");
+                                            } catch (JSONException ex) {
+                                                //
+                                            }
+                                        }finally {
+                                            TAInstance instance = new TAInstance(instanceJSon);
+                                            instance.save();
+                                        }
+                                    }
+                                });
                             }
                         }
-                    };
-                    //检查匹配和跨域问题
-                    TAUtil.checkAppIDAndUrl(instanceJSon.optString("url"), mAppID, requestListener);
+                    });
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }

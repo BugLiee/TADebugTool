@@ -3,16 +3,12 @@ package com.thinkingdata.tadebugtool;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +19,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.thinkingdata.tadebugtool.bean.TAEvent;
 import com.thinkingdata.tadebugtool.bean.TAInstance;
 import com.thinkingdata.tadebugtool.ui.adapter.AppInfoRecyclerViewAdapter;
 import com.thinkingdata.tadebugtool.ui.adapter.EventListRecyclerViewAdapter;
@@ -39,8 +34,6 @@ import com.thinkingdata.tadebugtool.utils.TAUtil;
 import org.litepal.LitePal;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
     private List<TAInstance> instances;
     private boolean isItemOpened = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 tryShowHeader();
             }
         });
+
     }
 
     private void queryAppList() {

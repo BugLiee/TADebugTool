@@ -1,0 +1,19 @@
+<html>
+<head>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <script>
+function checkUrl(url) {
+  $.ajax({
+      url: url,
+      type: 'GET',
+      dataType: "jsonp", //跨域采用jsonp方式
+      complete: function(){
+        alert("ggggggg");
+        window.callJava.checkUrlCallback('hhhhh')
+      }
+    });
+}
+window.onload=checkUrl("gggggg")
+</script>
+</head>
+</html>

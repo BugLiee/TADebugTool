@@ -33,6 +33,10 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+import com.thinkingdata.tadebugtool.RequestListener;
 import com.thinkingdata.tadebugtool.common.TAConstants;
 import com.thinkingdata.tadebugtool.ui.widget.FloatLayout;
 
@@ -55,6 +59,7 @@ import java.net.URL;
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -455,7 +460,7 @@ public class TAUtil {
 
     }
 
-    public static void checkAppIDAndUrl(String destUrl, String appID, FloatLayout.RequestListener requestListener) {
+    public static void checkAppIDAndUrl(String destUrl, String appID, RequestListener requestListener) {
         String cUrl = (destUrl.contains("/sync") ? destUrl.substring(0, destUrl.lastIndexOf("/sync")) : destUrl) + "/check_appid" + "?appid=" + appID;
 
         new Thread(() -> {
@@ -503,5 +508,22 @@ public class TAUtil {
                 }
             }
         }).start();
+    }
+
+    public static void checkUrl(Activity activity, String url, RequestListener requestListener) {
+        AQuery aq = new AQuery(activity);
+//        AQUtility.setDebug(true);
+        Map<String, String> map = new HashMap<>();
+        map.put("test", "");
+        aq.ajax(url, map, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject respondStr, AjaxStatus status) {
+                if (status.getCode() == 200) {
+                    requestListener.requestEnd(200, respondStr.toString());
+                } else {
+                    requestListener.requestEnd(status.getCode(), respondStr.toString());
+                }
+            }
+        });
     }
 }
