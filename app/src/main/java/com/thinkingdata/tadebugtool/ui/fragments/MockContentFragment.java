@@ -35,6 +35,8 @@ import com.thinkingdata.tadebugtool.utils.SnackbarUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -253,6 +255,16 @@ public class MockContentFragment extends Fragment {
         ThinkingAnalyticsSDK.enableTrackLog(true);
         String appID = appIDET.getText().toString().trim();
         String serverUrl = serverUrlET.getText().toString().trim();
+        if (TextUtils.isEmpty(appID) || TextUtils.isEmpty(serverUrl)) {
+            SnackbarUtil.showSnackBarMid("您的 appID 或者 serverUrl 不要漏了噢");
+            return;
+        }
+        try {
+            new URL(serverUrl);
+        } catch (MalformedURLException e) {
+            SnackbarUtil.showSnackBarMid("Invalid server URL: " + serverUrl);
+            return;
+        }
         TDConfig config = TDConfig.getInstance(getActivity(), appID, serverUrl);
         ThinkingAnalyticsSDK instance = ThinkingAnalyticsSDK.sharedInstance(config);
         String eventName = eventNameET.getText().toString().trim();
